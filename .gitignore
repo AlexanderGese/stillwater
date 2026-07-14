@@ -1,0 +1,6 @@
+/target
+*.save
+/.worktrees
+/.superpowers
+/.stillwater.save
+/.stillwater.save.tmp
