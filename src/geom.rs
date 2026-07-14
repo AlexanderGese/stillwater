@@ -26,3 +26,15 @@ pub enum Dir {
     West,
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn stepping_moves_one_tile() {
+        let p = Point::new(3, 3);
+        assert_eq!(p.step(Dir::North), Point::new(3, 2));
+        assert_eq!(p.step(Dir::South), Point::new(3, 4));
+        assert_eq!(p.step(Dir::East), Point::new(4, 3));
+        assert_eq!(p.step(Dir::West), Point::new(2, 3));
+    }
+}
