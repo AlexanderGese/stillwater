@@ -27,3 +27,35 @@ told through her old fishing journal, ending when the whole valley is alive agai
 
 ## Controls
 
+| Keys | Does |
+|------|------|
+| `w a s d` / arrows | walk |
+| `e` / space / enter | cast at the water · set the hook · reel · sleep at the bed (`B`) · open the shop (`H`) |
+| `w` / `s` (during a fight) | **reel** / **ease** — ease off while the fish is *darting*, reel when it's calm |
+| `j` | open the fish journal |
+| `z` | wait a little while |
+| `1`–`9` | buy in the shop / fund a project on the restoration board |
+| `esc` | close a menu |
+| `q` | quit |
+
+Walk into an open edge of a map to travel to the next area.
+
+## The loop
+
+Walk out onto the dock, face the lake, and cast. Wait for a bite, set the hook,
+then reel the fish in without letting the line snap — watch the tension bar and
+ease off when it darts. Landing a fish pays out gold and records it in your
+**journal** (27 species across the four seasons, dawn-to-night windows, and four
+water types).
+
+Spend your gold at the tackle shop (`H`): better **rods** cast farther into
+deeper water and fight fish more forgivingly, and better **bait** draws more
+bites. Sleep at your bed (`B`) to roll into the next day — the calendar advances
+through 28-day seasons, and each morning brings fresh weather that changes what's
+biting (rain and storms stir the fish up; frost and snow slow them down).
+
+## The valley
+
+Six hand-drawn areas linked at their edges, rendered with smart box-drawing
+walls and a camera that follows you across the big maps:
+
