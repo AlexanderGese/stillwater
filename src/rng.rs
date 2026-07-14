@@ -29,3 +29,23 @@ impl Rng {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn same_seed_same_sequence() {
+        let mut a = Rng::new(42);
+        let mut b = Rng::new(42);
+        for _ in 0..100 {
+            assert_eq!(a.next_u64(), b.next_u64());
+        }
+    }
+    #[test]
+    fn below_is_in_range() {
+        let mut r = Rng::new(1);
+        for _ in 0..1000 {
+            assert!(r.below(6) < 6);
+        }
+        assert_eq!(r.below(0), 0);
+    }
+}
