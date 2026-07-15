@@ -32,3 +32,28 @@ impl Map {
         if self.in_bounds(p) {
             let i = self.idx(p);
             self.tiles[i] = t;
+        }
+    }
+    pub fn walkable(&self, p: Point) -> bool {
+        self.in_bounds(p) && self.get(p).walkable()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::geom::Point;
+    use crate::tile::Tile;
+    #[test]
+    fn set_get_and_bounds() {
+        let mut m = Map::new(5, 4);
+        assert_eq!(m.get(Point::new(0, 0)), Tile::Grass);
+        m.set(Point::new(2, 1), Tile::Wall);
+        assert_eq!(m.get(Point::new(2, 1)), Tile::Wall);
+        assert!(!m.walkable(Point::new(2, 1)));
+        assert!(m.walkable(Point::new(0, 0)));
+        assert_eq!(m.get(Point::new(-1, 0)), Tile::Wall); // oob
+        assert!(!m.in_bounds(Point::new(5, 0)));
+        assert!(!m.walkable(Point::new(5, 0)));
+    }
+}
