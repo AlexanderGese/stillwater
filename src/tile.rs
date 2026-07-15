@@ -49,3 +49,37 @@ impl Tile {
             '~' => Tile::ShallowWater,
             '\u{2248}' => Tile::DeepWater,
             '=' => Tile::Dock,
+            'B' => Tile::Bed,
+            'S' => Tile::ShipBin,
+            'H' => Tile::Shop,
+            'N' => Tile::Sign,
+            'T' => Tile::Tree,
+            'o' => Tile::Rock,
+            'x' => Tile::Bridge,
+            _ => Tile::Grass,
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn walkability_and_water() {
+        assert!(Tile::Grass.walkable());
+        assert!(Tile::Dock.walkable());
+        assert!(!Tile::Wall.walkable());
+        assert!(!Tile::ShallowWater.walkable());
+        assert!(Tile::ShallowWater.is_water());
+        assert!(Tile::DeepWater.is_water());
+        assert!(!Tile::Grass.is_water());
+    }
+    #[test]
+    fn from_char_roundtrips_key_tiles() {
+        assert_eq!(Tile::from_char('#'), Tile::Wall);
+        assert_eq!(Tile::from_char('~'), Tile::ShallowWater);
+        assert_eq!(Tile::from_char('='), Tile::Dock);
+        assert_eq!(Tile::from_char('.'), Tile::Grass);
+        assert_eq!(Tile::from_char('?'), Tile::Grass); // unknown fallback
+    }
+}
