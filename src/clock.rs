@@ -29,3 +29,35 @@ impl Clock {
         self.minutes = Self::DAY_START;
     }
 
+    /// Hour in 0..24 (wrapping past midnight).
+    pub fn hour24(&self) -> i32 {
+        (self.minutes / 60) % 24
+    }
+
+    pub fn minute(&self) -> i32 {
+        self.minutes % 60
+    }
+
+    pub fn is_past(&self, hour24: i32) -> bool {
+        self.minutes >= hour24 * 60
+    }
+
+    pub fn should_collapse(&self) -> bool {
+        self.minutes >= Self::COLLAPSE
+    }
+
+    pub fn is_dusk(&self) -> bool {
+        self.minutes >= Self::DUSK
+    }
+
+    pub fn tod(&self) -> TimeOfDay {
+        let h = self.hour24();
+        match h {
+            6..=7 => TimeOfDay::Dawn,
+            8..=11 => TimeOfDay::Morning,
+            12..=16 => TimeOfDay::Day,
+            17..=19 => TimeOfDay::Dusk,
+            _ => TimeOfDay::Night, // 20-23 and 0-5
+        }
+    }
+
