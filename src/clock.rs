@@ -78,3 +78,28 @@ impl Clock {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn starts_at_six_am_and_advances() {
+        let mut c = Clock::new();
+        assert_eq!(c.hour24(), 6);
+        assert_eq!(c.label(), "6:00am");
+        c.advance(90);
+        assert_eq!(c.hour24(), 7);
+        assert_eq!(c.minute(), 30);
+        assert_eq!(c.label(), "7:30am");
+        assert!(matches!(c.tod(), TimeOfDay::Dawn));
+    }
+    #[test]
+    fn collapse_and_pm_labels() {
+        let mut c = Clock::new();
+        c.advance(12 * 60); // 6pm
+        assert_eq!(c.label(), "6:00pm");
+        assert!(c.is_dusk());
+        assert!(!c.should_collapse());
+        c.advance(8 * 60); // 2am
+        assert!(c.should_collapse());
+    }
+}
