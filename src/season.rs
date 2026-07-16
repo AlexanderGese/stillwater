@@ -63,3 +63,14 @@ pub enum WaterType {
     Marsh,
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn season_cycles() {
+        assert_eq!(Season::Spring.next(), Season::Summer);
+        assert_eq!(Season::Winter.next(), Season::Spring);
+        assert_eq!(Season::all().len(), 4);
+        assert_eq!(Season::Fall.index(), 2);
+    }
+}
