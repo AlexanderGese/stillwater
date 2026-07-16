@@ -30,3 +30,36 @@ impl Season {
         }
     }
 
+    pub fn index(self) -> usize {
+        match self {
+            Season::Spring => 0,
+            Season::Summer => 1,
+            Season::Fall => 2,
+            Season::Winter => 3,
+        }
+    }
+
+    pub fn all() -> [Season; 4] {
+        [Season::Spring, Season::Summer, Season::Fall, Season::Winter]
+    }
+}
+
+/// Coarse time-of-day bucket, used by fishing tables and rendering mood.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum TimeOfDay {
+    Dawn,    // 6-8
+    Morning, // 8-12
+    Day,     // 12-17
+    Dusk,    // 17-20
+    Night,   // 20-2
+}
+
+/// Kind of water a fishing spot sits on.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum WaterType {
+    Shallow,
+    Deep,
+    River,
+    Marsh,
+}
+
