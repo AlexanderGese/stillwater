@@ -61,3 +61,20 @@ impl Clock {
         }
     }
 
+    /// "6:00am" style label.
+    pub fn label(&self) -> String {
+        let h24 = self.hour24();
+        let m = self.minute();
+        let (h12, ampm) = if h24 == 0 {
+            (12, "am")
+        } else if h24 < 12 {
+            (h24, "am")
+        } else if h24 == 12 {
+            (12, "pm")
+        } else {
+            (h24 - 12, "pm")
+        };
+        format!("{}:{:02}{}", h12, m, ampm)
+    }
+}
+
