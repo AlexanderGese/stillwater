@@ -39,3 +39,27 @@ impl Calendar {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn rolls_season_and_year() {
+        let mut c = Calendar::new();
+        assert_eq!(c.label(), "Spring 1");
+        for _ in 0..27 {
+            assert!(!c.advance_day());
+        }
+        assert_eq!(c.day, 28);
+        assert!(c.advance_day()); // -> Summer 1
+        assert_eq!(c.season, Season::Summer);
+        assert_eq!(c.day, 1);
+        // roll all the way to next year
+        let mut c = Calendar::new();
+        for _ in 0..(Season::DAYS * 4) {
+            c.advance_day();
+        }
+        assert_eq!(c.year, 2);
+        assert_eq!(c.season, Season::Spring);
+        assert_eq!(c.day, 1);
+    }
+}
