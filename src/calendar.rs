@@ -17,3 +17,25 @@ impl Calendar {
         }
     }
 
+    /// Advance to the next day, rolling season (and year) at the boundary.
+    /// Returns true if the season changed.
+    pub fn advance_day(&mut self) -> bool {
+        self.day += 1;
+        if self.day > Season::DAYS {
+            self.day = 1;
+            self.season = self.season.next();
+            if self.season == Season::Spring {
+                self.year += 1;
+            }
+            true
+        } else {
+            false
+        }
+    }
+
+    /// "Spring 3" style label.
+    pub fn label(&self) -> String {
+        format!("{} {}", self.season.name(), self.day)
+    }
+}
+
