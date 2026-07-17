@@ -62,3 +62,37 @@ impl Weather {
     }
 }
 
+/// Roll tomorrow's weather from this season's weighted distribution.
+/// Deterministic given the rng: draws a single `rng.below(100)` value and
+/// walks cumulative weight thresholds per season.
+pub fn roll(season: Season, rng: &mut Rng) -> Weather {
+    let roll = rng.below(100);
+    match season {
+        // Spring: rainy and cloudy, with a little fog/storm; no frost/snow.
+        Season::Spring => {
+            if roll < 35 {
+                Weather::Rain
+            } else if roll < 65 {
+                Weather::Cloudy
+            } else if roll < 90 {
+                Weather::Sunny
+            } else if roll < 95 {
+                Weather::Fog
+            } else {
+                Weather::Storm
+            }
+        }
+        // Summer: mostly sunny with occasional storms; no frost/snow/fog-heavy.
+        Season::Summer => {
+            if roll < 60 {
+                Weather::Sunny
+            } else if roll < 75 {
+                Weather::Cloudy
+            } else if roll < 90 {
+                Weather::Storm
+            } else if roll < 98 {
+                Weather::Rain
+            } else {
+                Weather::Fog
+            }
+        }
