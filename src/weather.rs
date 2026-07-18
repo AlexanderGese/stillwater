@@ -96,3 +96,34 @@ pub fn roll(season: Season, rng: &mut Rng) -> Weather {
                 Weather::Fog
             }
         }
+        // Fall: foggy, rainy, cloudy, with light frost creeping in; no snow.
+        Season::Fall => {
+            if roll < 25 {
+                Weather::Fog
+            } else if roll < 50 {
+                Weather::Rain
+            } else if roll < 75 {
+                Weather::Cloudy
+            } else if roll < 90 {
+                Weather::Sunny
+            } else if roll < 95 {
+                Weather::Storm
+            } else {
+                Weather::Frost
+            }
+        }
+        // Winter: snow, frost, cloudy; no rain/storm/fog.
+        Season::Winter => {
+            if roll < 35 {
+                Weather::Snow
+            } else if roll < 65 {
+                Weather::Frost
+            } else if roll < 90 {
+                Weather::Cloudy
+            } else {
+                Weather::Sunny
+            }
+        }
+    }
+}
+
