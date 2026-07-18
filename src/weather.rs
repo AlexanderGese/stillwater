@@ -127,3 +127,27 @@ pub fn roll(season: Season, rng: &mut Rng) -> Weather {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn roll_is_deterministic_for_same_seed() {
+        let mut a = Rng::new(1234);
+        let mut b = Rng::new(1234);
+        for _ in 0..200 {
+            assert_eq!(roll(Season::Spring, &mut a), roll(Season::Spring, &mut b));
+        }
+    }
+
+    #[test]
+    fn roll_is_deterministic_across_all_seasons() {
+        for season in Season::all() {
+            let mut a = Rng::new(999);
+            let mut b = Rng::new(999);
+            let seq_a: Vec<Weather> = (0..50).map(|_| roll(season, &mut a)).collect();
+            let seq_b: Vec<Weather> = (0..50).map(|_| roll(season, &mut b)).collect();
+            assert_eq!(seq_a, seq_b);
+        }
+    }
+
