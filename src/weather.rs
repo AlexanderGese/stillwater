@@ -151,3 +151,28 @@ mod tests {
         }
     }
 
+    #[test]
+    fn winter_never_rains_or_storms_or_fogs() {
+        let mut rng = Rng::new(7);
+        for _ in 0..2000 {
+            let w = roll(Season::Winter, &mut rng);
+            assert_ne!(w, Weather::Rain);
+            assert_ne!(w, Weather::Storm);
+            assert_ne!(w, Weather::Fog);
+        }
+    }
+
+    #[test]
+    fn only_winter_produces_snow() {
+        let mut rng = Rng::new(11);
+        for season in [Season::Spring, Season::Summer, Season::Fall] {
+            for _ in 0..2000 {
+                assert_ne!(roll(season, &mut rng), Weather::Snow);
+            }
+        }
+        // Winter must actually be able to roll snow.
+        let mut winter_rng = Rng::new(13);
+        let saw_snow = (0..2000).any(|_| roll(Season::Winter, &mut winter_rng) == Weather::Snow);
+        assert!(saw_snow);
+    }
+
