@@ -176,3 +176,29 @@ mod tests {
         assert!(saw_snow);
     }
 
+    #[test]
+    fn summer_never_snows_or_frosts() {
+        let mut rng = Rng::new(21);
+        for _ in 0..2000 {
+            let w = roll(Season::Summer, &mut rng);
+            assert_ne!(w, Weather::Snow);
+            assert_ne!(w, Weather::Frost);
+        }
+    }
+
+    #[test]
+    fn is_wet_only_for_rain_and_storm() {
+        for w in [
+            Weather::Sunny,
+            Weather::Cloudy,
+            Weather::Rain,
+            Weather::Storm,
+            Weather::Fog,
+            Weather::Frost,
+            Weather::Snow,
+        ] {
+            let expected = matches!(w, Weather::Rain | Weather::Storm);
+            assert_eq!(w.is_wet(), expected);
+        }
+    }
+
