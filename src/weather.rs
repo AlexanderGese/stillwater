@@ -202,3 +202,18 @@ mod tests {
         }
     }
 
+    #[test]
+    fn every_weather_has_non_space_glyph() {
+        for w in [
+            Weather::Sunny,
+            Weather::Cloudy,
+            Weather::Rain,
+            Weather::Storm,
+            Weather::Fog,
+            Weather::Frost,
+            Weather::Snow,
+        ] {
+            assert_ne!(w.glyph(), ' ');
+        }
+    }
+}
