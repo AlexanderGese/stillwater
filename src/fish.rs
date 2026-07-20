@@ -196,3 +196,37 @@ pub static FISH: &[FishDef] = &[
         size_max: 34,
         difficulty: 3,
         base_price: 15,
+        bait_pref: 5, // Roe
+    },
+    FishDef {
+        id: 13,
+        name: "Firefly Gar",
+        glyph: 'f',
+        seasons: &[Summer],
+        waters: &[Marsh, River],
+        times: &[Night],
+        rarity: 3,
+        size_min: 40,
+        size_max: 70,
+        difficulty: 6,
+        base_price: 40,
+        bait_pref: 6, // Glowbait
+    },
+    FishDef {
+        id: 14,
+        name: "Deepwater Sturgeon",
+        glyph: 'S',
+        seasons: &[Summer, Fall, Winter],
+        waters: &[Deep],
+        times: &[Night, Dawn],
+        rarity: 4,
+        size_min: 70,
+        size_max: 130,
+        difficulty: 9,
+        base_price: 120,
+        bait_pref: 5,
+    },
+    // --- Fall ---
+    FishDef {
+        id: 15,
+        name: "Amber Walleye",
