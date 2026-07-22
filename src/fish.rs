@@ -638,3 +638,37 @@ pub static FISH: &[FishDef] = &[
         base_price: 34,
         bait_pref: 3,
     },
+    FishDef {
+        id: 44,
+        name: "Harvest Moon Carp",
+        glyph: 'H',
+        seasons: &[Fall],
+        waters: &[Shallow],
+        times: &[Night],
+        rarity: 4,
+        size_min: 45,
+        size_max: 80,
+        difficulty: 6,
+        base_price: 95,
+        bait_pref: 5,
+    },
+    FishDef {
+        id: 45,
+        name: "Petal Drift Betta",
+        glyph: 'B',
+        seasons: &[Spring],
+        waters: &[Marsh],
+        times: &[Dawn],
+        rarity: 3,
+        size_min: 10,
+        size_max: 20,
+        difficulty: 3,
+        base_price: 30,
+        bait_pref: 0,
+    },
+];
+
+pub fn by_id(id: u16) -> Option<&'static FishDef> {
+    FISH.iter().find(|f| f.id == id)
+}
+
