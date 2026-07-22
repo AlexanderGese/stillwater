@@ -672,3 +672,35 @@ pub fn by_id(id: u16) -> Option<&'static FishDef> {
     FISH.iter().find(|f| f.id == id)
 }
 
+/// Fish that can bite given the current season, water type, and time of day.
+pub fn available(season: Season, water: WaterType, tod: TimeOfDay) -> Vec<&'static FishDef> {
+    FISH.iter()
+        .filter(|f| {
+            f.seasons.contains(&season) && f.waters.contains(&water) && f.times.contains(&tod)
+        })
+        .collect()
+}
+
+/// A landed fish: which species + its rolled individual size.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct Catch {
+    pub fish_id: u16,
+    pub size: u16,
+}
+
+impl Catch {
+    /// Sale value: base_price scaled by how large this individual is within its
+    /// species size range (bigger = worth more). Never panics if the id is
+    /// unknown -- returns 0.
+    pub fn value(&self) -> u32 {
+        let def = match by_id(self.fish_id) {
+            Some(d) => d,
+            None => return 0,
+        };
+
+        // Scale factor: 0.6x at size_min, 1.5x at size_max, linear in between.
+        let (min, max) = (def.size_min as f64, def.size_max as f64);
+        let size = (self.size as f64).clamp(min, max);
+        let frac = if max > min { (size - min) / (max - min) } else { 0.0 };
+        let scale = 0.6 + frac * (1.5 - 0.6);
+
