@@ -704,3 +704,26 @@ impl Catch {
         let frac = if max > min { (size - min) / (max - min) } else { 0.0 };
         let scale = 0.6 + frac * (1.5 - 0.6);
 
+        ((def.base_price as f64) * scale).round() as u32
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn ids_are_unique_and_positive() {
+        let mut ids: Vec<u16> = FISH.iter().map(|f| f.id).collect();
+        ids.sort_unstable();
+        let mut dedup = ids.clone();
+        dedup.dedup();
+        assert_eq!(ids.len(), dedup.len(), "duplicate fish ids found");
+        assert!(FISH.iter().all(|f| f.id > 0));
+    }
+
+    #[test]
+    fn species_count_in_range() {
+        assert!(FISH.len() >= 40 && FISH.len() <= 50, "expected ~40-50 species, got {}", FISH.len());
+    }
+
