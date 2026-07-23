@@ -786,3 +786,28 @@ mod tests {
         assert_eq!(c.value(), 0);
     }
 
+    #[test]
+    fn value_is_positive_and_monotonic_in_size() {
+        // Sunfin Panfish: size 8..16, base_price 4.
+        let def = by_id(1).unwrap();
+        let small = Catch { fish_id: 1, size: def.size_min };
+        let big = Catch { fish_id: 1, size: def.size_max };
+        let mid = Catch { fish_id: 1, size: (def.size_min + def.size_max) / 2 };
+
+        assert!(small.value() > 0);
+        assert!(big.value() > small.value());
+        assert!(big.value() >= mid.value());
+        assert!(mid.value() >= small.value());
+    }
+
+    #[test]
+    fn value_clamped_for_out_of_range_size() {
+        let def = by_id(1).unwrap();
+        let below = Catch { fish_id: 1, size: 0 };
+        let above = Catch { fish_id: 1, size: def.size_max + 50 };
+        let at_min = Catch { fish_id: 1, size: def.size_min };
+        let at_max = Catch { fish_id: 1, size: def.size_max };
+        assert_eq!(below.value(), at_min.value());
+        assert_eq!(above.value(), at_max.value());
+    }
+}
