@@ -727,3 +727,35 @@ mod tests {
         assert!(FISH.len() >= 40 && FISH.len() <= 50, "expected ~40-50 species, got {}", FISH.len());
     }
 
+    #[test]
+    fn every_species_has_non_empty_lists_and_sane_sizes() {
+        for f in FISH {
+            assert!(!f.seasons.is_empty(), "{} has no seasons", f.name);
+            assert!(!f.waters.is_empty(), "{} has no waters", f.name);
+            assert!(!f.times.is_empty(), "{} has no times", f.name);
+            assert!(f.size_min <= f.size_max, "{} has size_min > size_max", f.name);
+            assert!(f.rarity >= 1 && f.rarity <= 5, "{} rarity out of range", f.name);
+            assert!(f.difficulty >= 1 && f.difficulty <= 10, "{} difficulty out of range", f.name);
+            assert!(f.base_price > 0, "{} has zero base_price", f.name);
+            assert_ne!(f.name, "", "fish has empty name");
+        }
+    }
+
+    #[test]
+    fn all_seasons_and_waters_represented() {
+        for s in ALL_SEASONS {
+            assert!(
+                FISH.iter().any(|f| f.seasons.contains(s)),
+                "no fish available in season {:?}",
+                s
+            );
+        }
+        for w in ALL_WATERS {
+            assert!(
+                FISH.iter().any(|f| f.waters.contains(w)),
+                "no fish available in water {:?}",
+                w
+            );
+        }
+    }
+
