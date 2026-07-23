@@ -32,3 +32,30 @@ pub static BAIT: &[BaitDef] = &[
         bite_bonus: 15,
     },
     BaitDef {
+        id: 4,
+        name: "Shrimp",
+        cost: 35,
+        bite_bonus: 22,
+    },
+    BaitDef {
+        id: 5,
+        name: "Roe",
+        cost: 55,
+        bite_bonus: 30,
+    },
+    BaitDef {
+        id: 6,
+        name: "Glowbait",
+        cost: 90,
+        bite_bonus: 40,
+    },
+];
+
+pub fn by_id(id: u16) -> Option<&'static BaitDef> {
+    BAIT.iter().find(|b| b.id == id)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
