@@ -759,3 +759,30 @@ mod tests {
         }
     }
 
+    #[test]
+    fn available_returns_matches_for_known_combo() {
+        // Sunfin Panfish (id 1): Spring/Summer, Shallow, Dawn/Morning/Day.
+        let hits = available(Season::Spring, WaterType::Shallow, TimeOfDay::Dawn);
+        assert!(hits.iter().any(|f| f.id == 1));
+    }
+
+    #[test]
+    fn available_excludes_out_of_season() {
+        // Frostgill Trout (id 21) is Winter-only in River/Deep.
+        let hits = available(Season::Summer, WaterType::River, TimeOfDay::Day);
+        assert!(!hits.iter().any(|f| f.id == 21));
+    }
+
+    #[test]
+    fn available_excludes_wrong_water() {
+        // Icevein Char (id 22) is Deep-only.
+        let hits = available(Season::Winter, WaterType::Shallow, TimeOfDay::Day);
+        assert!(!hits.iter().any(|f| f.id == 22));
+    }
+
+    #[test]
+    fn value_unknown_id_is_zero() {
+        let c = Catch { fish_id: 9999, size: 20 };
+        assert_eq!(c.value(), 0);
+    }
+
