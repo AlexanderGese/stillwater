@@ -59,3 +59,35 @@ pub fn by_id(id: u16) -> Option<&'static BaitDef> {
 mod tests {
     use super::*;
 
+    #[test]
+    fn test_ids_unique_and_sequential() {
+        let ids: Vec<u16> = BAIT.iter().map(|b| b.id).collect();
+        // Check all ids are present from 1 to 6
+        assert_eq!(ids.len(), 6);
+        for expected_id in 1..=6 {
+            assert!(ids.contains(&expected_id), "Missing id: {}", expected_id);
+        }
+        // Check no duplicates
+        for (i, id1) in ids.iter().enumerate() {
+            for id2 in ids.iter().skip(i + 1) {
+                assert_ne!(id1, id2, "Duplicate id found");
+            }
+        }
+    }
+
+    #[test]
+    fn test_by_id_cricket() {
+        let cricket = by_id(3);
+        assert!(cricket.is_some());
+        let bait = cricket.unwrap();
+        assert_eq!(bait.name, "Cricket");
+        assert_eq!(bait.id, 3);
+        assert_eq!(bait.cost, 20);
+        assert_eq!(bait.bite_bonus, 15);
+    }
+
+    #[test]
+    fn test_by_id_none() {
+        assert!(by_id(99).is_none());
+    }
+
