@@ -91,3 +91,27 @@ mod tests {
         assert!(by_id(99).is_none());
     }
 
+    #[test]
+    fn test_costs_strictly_ascending() {
+        for i in 0..BAIT.len() - 1 {
+            assert!(
+                BAIT[i].cost < BAIT[i + 1].cost,
+                "Costs not strictly ascending: {} >= {}",
+                BAIT[i].cost,
+                BAIT[i + 1].cost
+            );
+        }
+    }
+
+    #[test]
+    fn test_bite_bonus_strictly_ascending() {
+        for i in 0..BAIT.len() - 1 {
+            assert!(
+                BAIT[i].bite_bonus < BAIT[i + 1].bite_bonus,
+                "Bite bonus not strictly ascending: {} >= {}",
+                BAIT[i].bite_bonus,
+                BAIT[i + 1].bite_bonus
+            );
+        }
+    }
+}
