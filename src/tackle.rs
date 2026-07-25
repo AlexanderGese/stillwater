@@ -45,3 +45,31 @@ pub static RODS: &[RodDef] = &[
         bite_bonus: 25,
         line_strength: 5,
         cost: 8000,
+    },
+];
+
+/// The rod at a given tier (falls back to the starter if out of range).
+pub fn rod(tier: u8) -> &'static RodDef {
+    RODS.iter().find(|r| r.tier == tier).unwrap_or(&RODS[0])
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_rod_tier_0_is_free() {
+        assert_eq!(rod(0).cost, 0);
+    }
+
+    #[test]
+    fn test_rod_tier_2_is_lakecaster() {
+        assert_eq!(rod(2).name, "Lakecaster");
+    }
+
+    #[test]
+    fn test_rod_out_of_range_falls_back() {
+        assert_eq!(rod(99).tier, 0);
+        assert_eq!(rod(99).name, "Old Rod");
+    }
+
