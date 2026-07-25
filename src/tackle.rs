@@ -101,3 +101,10 @@ mod tests {
         }
     }
 
+    #[test]
+    fn test_all_tiers_unique() {
+        let mut tiers: Vec<u8> = RODS.iter().map(|r| r.tier).collect();
+        tiers.sort_unstable();
+        assert_eq!(tiers, vec![0, 1, 2, 3]);
+    }
+}
