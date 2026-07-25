@@ -73,3 +73,31 @@ mod tests {
         assert_eq!(rod(99).name, "Old Rod");
     }
 
+    #[test]
+    fn test_rods_strictly_increase_reach() {
+        for i in 1..RODS.len() {
+            assert!(RODS[i].reach > RODS[i - 1].reach);
+        }
+    }
+
+    #[test]
+    fn test_rods_strictly_increase_bite_bonus() {
+        for i in 1..RODS.len() {
+            assert!(RODS[i].bite_bonus > RODS[i - 1].bite_bonus);
+        }
+    }
+
+    #[test]
+    fn test_rods_strictly_increase_line_strength() {
+        for i in 1..RODS.len() {
+            assert!(RODS[i].line_strength > RODS[i - 1].line_strength);
+        }
+    }
+
+    #[test]
+    fn test_rods_strictly_increase_cost() {
+        for i in 1..RODS.len() {
+            assert!(RODS[i].cost > RODS[i - 1].cost);
+        }
+    }
+
