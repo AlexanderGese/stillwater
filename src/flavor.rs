@@ -19,3 +19,37 @@ pub fn greeting(rng: &mut Rng) -> &'static str {
     LINES[rng.below(LINES.len() as u32) as usize]
 }
 
+/// A short line describing the day's weather/mood. AGENT: vary by weather.
+pub fn weather_line(w: Weather, rng: &mut Rng) -> &'static str {
+    match w {
+        Weather::Sunny => {
+            const LINES: [&str; 4] = [
+                "The sun feels warm on your shoulders.",
+                "A bright, clear day for fishing.",
+                "Light sparkles across the water.",
+                "Not a cloud in the sky.",
+            ];
+            LINES[rng.below(LINES.len() as u32) as usize]
+        }
+        Weather::Cloudy => {
+            const LINES: [&str; 4] = [
+                "Soft grey clouds drift overhead.",
+                "The light is gentle and even today.",
+                "A cool breeze moves under a hazy sky.",
+                "The clouds hang low and quiet.",
+            ];
+            LINES[rng.below(LINES.len() as u32) as usize]
+        }
+        Weather::Rain => {
+            const LINES: [&str; 4] = [
+                "Rain patters softly on the water.",
+                "A gentle rain settles the dust.",
+                "The lake ripples under a steady drizzle.",
+                "Raindrops ring out on your hat brim.",
+            ];
+            LINES[rng.below(LINES.len() as u32) as usize]
+        }
+        Weather::Storm => {
+            const LINES: [&str; 4] = [
+                "Thunder rumbles somewhere far off.",
+                "The wind whips the reeds along the shore.",
