@@ -120,3 +120,29 @@ mod tests {
         assert!(!catch_line(&mut rng).is_empty());
     }
 
+    #[test]
+    fn weather_line_non_empty_for_all_variants() {
+        let variants = [
+            Weather::Sunny,
+            Weather::Cloudy,
+            Weather::Rain,
+            Weather::Storm,
+            Weather::Fog,
+            Weather::Frost,
+            Weather::Snow,
+        ];
+        for w in variants {
+            let mut rng = Rng::new(11);
+            assert!(!weather_line(w, &mut rng).is_empty());
+        }
+    }
+
+    #[test]
+    fn greeting_deterministic_for_fixed_seed() {
+        let mut a = Rng::new(42);
+        let mut b = Rng::new(42);
+        for _ in 0..20 {
+            assert_eq!(greeting(&mut a), greeting(&mut b));
+        }
+    }
+
