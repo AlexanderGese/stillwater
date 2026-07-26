@@ -146,3 +146,34 @@ mod tests {
         }
     }
 
+    #[test]
+    fn catch_line_deterministic_for_fixed_seed() {
+        let mut a = Rng::new(99);
+        let mut b = Rng::new(99);
+        for _ in 0..20 {
+            assert_eq!(catch_line(&mut a), catch_line(&mut b));
+        }
+    }
+
+    #[test]
+    fn weather_line_deterministic_for_fixed_seed() {
+        let mut a = Rng::new(123);
+        let mut b = Rng::new(123);
+        for _ in 0..20 {
+            assert_eq!(
+                weather_line(Weather::Storm, &mut a),
+                weather_line(Weather::Storm, &mut b)
+            );
+        }
+    }
+
+    #[test]
+    fn greeting_varies_across_rng_states() {
+        let mut rng = Rng::new(1);
+        let mut seen = HashSet::new();
+        for _ in 0..50 {
+            seen.insert(greeting(&mut rng));
+        }
+        assert!(seen.len() > 1, "expected multiple distinct greetings");
+    }
+
