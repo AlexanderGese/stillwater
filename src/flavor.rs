@@ -87,3 +87,36 @@ pub fn weather_line(w: Weather, rng: &mut Rng) -> &'static str {
         }
     }
 }
+
+/// A little line when you land a fish. AGENT: fill a small table.
+pub fn catch_line(rng: &mut Rng) -> &'static str {
+    const LINES: [&str; 8] = [
+        "Nice catch.",
+        "A good one!",
+        "It put up a fight.",
+        "Reeled in nice and steady.",
+        "That's a keeper.",
+        "Right on the line.",
+        "A fine catch for the basket.",
+        "Well earned, that one.",
+    ];
+    LINES[rng.below(LINES.len() as u32) as usize]
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::collections::HashSet;
+
+    #[test]
+    fn greeting_is_non_empty() {
+        let mut rng = Rng::new(7);
+        assert!(!greeting(&mut rng).is_empty());
+    }
+
+    #[test]
+    fn catch_line_is_non_empty() {
+        let mut rng = Rng::new(7);
+        assert!(!catch_line(&mut rng).is_empty());
+    }
+
