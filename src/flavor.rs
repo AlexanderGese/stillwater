@@ -177,3 +177,23 @@ mod tests {
         assert!(seen.len() > 1, "expected multiple distinct greetings");
     }
 
+    #[test]
+    fn catch_line_varies_across_rng_states() {
+        let mut rng = Rng::new(2);
+        let mut seen = HashSet::new();
+        for _ in 0..50 {
+            seen.insert(catch_line(&mut rng));
+        }
+        assert!(seen.len() > 1, "expected multiple distinct catch lines");
+    }
+
+    #[test]
+    fn weather_line_varies_across_rng_states() {
+        let mut rng = Rng::new(3);
+        let mut seen = HashSet::new();
+        for _ in 0..50 {
+            seen.insert(weather_line(Weather::Rain, &mut rng));
+        }
+        assert!(seen.len() > 1, "expected multiple distinct weather lines");
+    }
+}
