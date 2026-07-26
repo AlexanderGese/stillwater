@@ -53,3 +53,37 @@ pub fn weather_line(w: Weather, rng: &mut Rng) -> &'static str {
             const LINES: [&str; 4] = [
                 "Thunder rumbles somewhere far off.",
                 "The wind whips the reeds along the shore.",
+                "Dark clouds gather over the ridge.",
+                "The lake churns under a restless sky.",
+            ];
+            LINES[rng.below(LINES.len() as u32) as usize]
+        }
+        Weather::Fog => {
+            const LINES: [&str; 4] = [
+                "A soft fog blankets the water.",
+                "The far shore is lost in mist.",
+                "Everything feels hushed and close.",
+                "Fog curls low over the still lake.",
+            ];
+            LINES[rng.below(LINES.len() as u32) as usize]
+        }
+        Weather::Frost => {
+            const LINES: [&str; 4] = [
+                "Frost glitters on the dock boards.",
+                "Your breath fogs in the crisp air.",
+                "The grass crunches, stiff with frost.",
+                "A cold, clear morning settles in.",
+            ];
+            LINES[rng.below(LINES.len() as u32) as usize]
+        }
+        Weather::Snow => {
+            const LINES: [&str; 4] = [
+                "Snow drifts down in slow, soft flakes.",
+                "A quiet blanket of snow covers the shore.",
+                "The world feels muffled and calm.",
+                "Snowflakes settle gently on the water's edge.",
+            ];
+            LINES[rng.below(LINES.len() as u32) as usize]
+        }
+    }
+}
