@@ -60,3 +60,37 @@ impl Session {
 const BITE_BASE: i32 = 16; // base % bite chance on the first wait tick
 const MAX_WAIT: i32 = 8; // give up after this many ticks with no bite
 
+/// Advance one tick while waiting for a bite (or waiting to hook a nibble).
+pub fn wait_tick(s: &mut Session, ctx: &BiteCtx, rng: &mut Rng) {
+    match &mut s.phase {
+        Phase::Waiting { waited } => {
+            let avail = fish::available(ctx.season, s.water, ctx.tod);
+            if avail.is_empty() {
+                s.phase = Phase::Lost("Nothing lives in these waters right now.");
+                return;
+            }
+            let w = *waited;
+            let chance = (BITE_BASE + w * 5 + ctx.weather.bite_bonus() + ctx.bait_bonus + ctx.rod_bonus)
+                .clamp(2, 95);
+            if (rng.below(100) as i32) < chance {
+                let f = pick_fish(&avail, ctx.bait_id, rng);
+                s.phase = Phase::Bite {
+                    fish_id: f.id,
+                    patience: 3,
+                };
+            } else if w >= MAX_WAIT {
+                s.phase = Phase::Lost("Not even a nibble. You reel the line back in.");
+            } else {
+                *waited = w + 1;
+            }
+        }
+        Phase::Bite { patience, .. } => {
+            // Dawdle too long and the fish spits the hook.
+            if *patience <= 1 {
+                s.phase = Phase::Lost("The fish spat out the bait and slipped away.");
+            } else {
+                *patience -= 1;
+            }
+        }
+        _ => {}
+    }
