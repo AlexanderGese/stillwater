@@ -31,3 +31,32 @@ pub struct Fight {
     pub surge: bool,      // just cleared a phase — the giant surges
 }
 
+pub enum Phase {
+    Waiting { waited: i32 },
+    Bite { fish_id: u16, patience: i32 },
+    Fighting(Fight),
+    Landed(Catch),
+    Lost(&'static str),
+}
+
+pub struct Session {
+    pub water: WaterType,
+    pub phase: Phase,
+}
+
+impl Session {
+    pub fn new(water: WaterType) -> Session {
+        Session {
+            water,
+            phase: Phase::Waiting { waited: 0 },
+        }
+    }
+
+    pub fn is_over(&self) -> bool {
+        matches!(self.phase, Phase::Landed(_) | Phase::Lost(_))
+    }
+}
+
+const BITE_BASE: i32 = 16; // base % bite chance on the first wait tick
+const MAX_WAIT: i32 = 8; // give up after this many ticks with no bite
+
