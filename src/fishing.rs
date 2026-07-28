@@ -94,3 +94,30 @@ pub fn wait_tick(s: &mut Session, ctx: &BiteCtx, rng: &mut Rng) {
         }
         _ => {}
     }
+}
+
+fn pick_fish<'a>(avail: &[&'a FishDef], bait_id: u16, rng: &mut Rng) -> &'a FishDef {
+    // Common fish (low rarity) are far likelier; matching bait doubles the odds.
+    let weights: Vec<u32> = avail
+        .iter()
+        .map(|f| {
+            let base = (6 - f.rarity.min(5)) as u32;
+            let base = base * base;
+            if f.bait_pref != 0 && f.bait_pref == bait_id {
+                base * 2
+            } else {
+                base
+            }
+        })
+        .collect();
+    let total: u32 = weights.iter().sum::<u32>().max(1);
+    let mut r = rng.below(total);
+    for (i, w) in weights.iter().enumerate() {
+        if r < *w {
+            return avail[i];
+        }
+        r -= *w;
+    }
+    avail[avail.len() - 1]
+}
+
