@@ -121,3 +121,28 @@ fn pick_fish<'a>(avail: &[&'a FishDef], bait_id: u16, rng: &mut Rng) -> &'a Fish
     avail[avail.len() - 1]
 }
 
+/// Set the hook: a biting fish becomes a fight.
+pub fn hook(s: &mut Session, ctx: &BiteCtx) {
+    if let Phase::Bite { fish_id, .. } = s.phase {
+        let def = fish::by_id(fish_id);
+        let difficulty = def.map(|f| f.difficulty).unwrap_or(1);
+        let boss = def.map(|f| f.rarity).unwrap_or(1) >= 5;
+        s.phase = Phase::Fighting(Fight {
+            fish_id,
+            progress: 0,
+            slack: 0,
+            darting: false,
+            difficulty,
+            line_strength: ctx.line_strength,
+            boss,
+            phases_left: if boss { 3 } else { 1 },
+            surge: false,
+        });
+    }
+}
+
+/// Is the current fish a legendary (fought as a boss)?
+pub fn is_boss(s: &Session) -> bool {
+    matches!(&s.phase, Phase::Fighting(f) if f.boss)
+}
+
