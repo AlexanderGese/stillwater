@@ -211,3 +211,34 @@ fn resolve(s: &mut Session, rng: &mut Rng) {
         Outcome::Snap => s.phase = Phase::Lost("The line snapped! It's gone."),
         Outcome::Land(id) => {
             let catch = roll_catch(id, rng);
+            s.phase = Phase::Landed(catch);
+        }
+        Outcome::Surge | Outcome::Continue => {}
+    }
+}
+
+fn roll_catch(fish_id: u16, rng: &mut Rng) -> Catch {
+    let (lo, hi) = fish::by_id(fish_id)
+        .map(|f| (f.size_min, f.size_max))
+        .unwrap_or((1, 1));
+    let span = (hi.saturating_sub(lo)) as u32 + 1;
+    let size = lo + rng.below(span) as u16;
+    Catch { fish_id, size }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn ctx() -> BiteCtx {
+        BiteCtx {
+            season: Season::Spring,
+            tod: TimeOfDay::Morning,
+            weather: Weather::Rain,
+            bait_id: 1,
+            bait_bonus: 5,
+            rod_bonus: 0,
+            line_strength: 3,
+        }
+    }
+
