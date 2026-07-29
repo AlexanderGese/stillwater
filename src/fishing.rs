@@ -242,3 +242,22 @@ mod tests {
         }
     }
 
+    #[test]
+    fn waiting_eventually_bites_in_stocked_water() {
+        let mut rng = Rng::new(42);
+        let mut s = Session::new(WaterType::Shallow);
+        let c = ctx();
+        let mut got_bite = false;
+        for _ in 0..12 {
+            wait_tick(&mut s, &c, &mut rng);
+            if matches!(s.phase, Phase::Bite { .. }) {
+                got_bite = true;
+                break;
+            }
+            if s.is_over() {
+                break;
+            }
+        }
+        assert!(got_bite, "should hook a bite in stocked shallow spring water");
+    }
+
