@@ -146,3 +146,34 @@ pub fn is_boss(s: &Session) -> bool {
     matches!(&s.phase, Phase::Fighting(f) if f.boss)
 }
 
+/// Reel hard: gains progress, but adds a lot of slack while the fish is darting.
+pub fn reel(s: &mut Session, rng: &mut Rng) {
+    if let Phase::Fighting(f) = &mut s.phase {
+        f.progress += 12;
+        let pull = if f.darting {
+            (24 - f.line_strength as i32 * 2).max(8)
+        } else {
+            4
+        };
+        f.slack += pull;
+        step_fight(f, rng);
+        resolve(s, rng);
+    }
+}
+
+/// Ease off: bleeds slack; makes a little progress only while the fish is calm.
+pub fn ease(s: &mut Session, rng: &mut Rng) {
+    if let Phase::Fighting(f) = &mut s.phase {
+        f.slack = (f.slack - 16).max(0);
+        f.progress += if f.darting { 0 } else { 3 };
+        step_fight(f, rng);
+        resolve(s, rng);
+    }
+}
+
+fn step_fight(f: &mut Fight, rng: &mut Rng) {
+    // Harder fish (and bosses) dart more often, tensing the reel-vs-ease read.
+    let dart_chance = 20 + f.difficulty as u32 * 5 + if f.boss { 15 } else { 0 };
+    f.darting = (rng.below(100)) < dart_chance;
+}
+
