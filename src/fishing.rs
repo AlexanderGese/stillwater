@@ -177,3 +177,37 @@ fn step_fight(f: &mut Fight, rng: &mut Rng) {
     f.darting = (rng.below(100)) < dart_chance;
 }
 
+enum Outcome {
+    Continue,
+    Snap,
+    Surge,
+    Land(u16),
+}
+
+fn resolve(s: &mut Session, rng: &mut Rng) {
+    let out = if let Phase::Fighting(f) = &mut s.phase {
+        f.surge = false;
+        if f.slack >= 100 {
+            Outcome::Snap
+        } else if f.progress >= 100 {
+            if f.phases_left > 1 {
+                // Cleared a boss phase: it dives and surges back harder.
+                f.phases_left -= 1;
+                f.progress = 30;
+                f.slack = (f.slack + 12).min(85);
+                f.darting = true;
+                f.surge = true;
+                Outcome::Surge
+            } else {
+                Outcome::Land(f.fish_id)
+            }
+        } else {
+            Outcome::Continue
+        }
+    } else {
+        Outcome::Continue
+    };
+    match out {
+        Outcome::Snap => s.phase = Phase::Lost("The line snapped! It's gone."),
+        Outcome::Land(id) => {
+            let catch = roll_catch(id, rng);
