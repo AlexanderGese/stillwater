@@ -58,3 +58,29 @@ mod tests {
         assert!(a.map.walkable(a.start));
     }
 
+    #[test]
+    fn has_shallow_water() {
+        let a = homestead_area();
+        let mut has_shallow = false;
+        for y in 0..a.map.h {
+            for x in 0..a.map.w {
+                if a.map.get(Point::new(x, y)) == crate::tile::Tile::ShallowWater {
+                    has_shallow = true;
+                }
+            }
+        }
+        assert!(has_shallow);
+    }
+
+    #[test]
+    fn east_edge_has_a_walkable_gap_to_the_lake() {
+        let a = homestead_area();
+        let mut found = false;
+        for y in 0..a.map.h {
+            if a.map.walkable(Point::new(a.map.w - 1, y)) {
+                found = true;
+            }
+        }
+        assert!(found);
+    }
+
