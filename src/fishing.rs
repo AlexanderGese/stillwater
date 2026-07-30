@@ -295,3 +295,33 @@ mod tests {
             }
             other => panic!("expected to land the fish, got {:?}", phase_name(other)),
         }
+    }
+
+    #[test]
+    fn reeling_recklessly_snaps_the_line() {
+        let mut rng = Rng::new(3);
+        // Force a hard fish fight directly.
+        let mut s = Session {
+            water: WaterType::Deep,
+            phase: Phase::Fighting(Fight {
+                fish_id: 14, // Deepwater Sturgeon (high difficulty)
+                progress: 0,
+                slack: 0,
+                darting: true,
+                difficulty: 9,
+                line_strength: 1,
+                boss: false,
+                phases_left: 1,
+                surge: false,
+            }),
+        };
+        // Only ever reel: slack should blow past 100 before landing.
+        for _ in 0..40 {
+            if s.is_over() {
+                break;
+            }
+            reel(&mut s, &mut rng);
+        }
+        assert!(matches!(s.phase, Phase::Lost(_)));
+    }
+
