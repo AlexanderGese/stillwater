@@ -325,3 +325,33 @@ mod tests {
         assert!(matches!(s.phase, Phase::Lost(_)));
     }
 
+    #[test]
+    fn legendary_is_a_multi_phase_boss() {
+        // Hooking a rarity-5 fish starts a 3-phase boss fight.
+        let leg = crate::fish::FISH.iter().find(|f| f.rarity >= 5);
+        let leg = match leg {
+            Some(f) => f,
+            None => return, // no legendary defined; nothing to assert
+        };
+        let mut s = Session::new(WaterType::Deep);
+        s.phase = Phase::Bite {
+            fish_id: leg.id,
+            patience: 3,
+        };
+        hook(&mut s, &ctx());
+        assert!(is_boss(&s));
+        if let Phase::Fighting(f) = &s.phase {
+            assert_eq!(f.phases_left, 3);
+        }
+    }
+
+    fn phase_name(p: &Phase) -> &'static str {
+        match p {
+            Phase::Waiting { .. } => "waiting",
+            Phase::Bite { .. } => "bite",
+            Phase::Fighting(_) => "fighting",
+            Phase::Landed(_) => "landed",
+            Phase::Lost(_) => "lost",
+        }
+    }
+}
