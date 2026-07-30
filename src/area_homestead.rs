@@ -84,3 +84,27 @@ mod tests {
         assert!(found);
     }
 
+    #[test]
+    fn north_edge_has_a_walkable_gap_to_town() {
+        let a = homestead_area();
+        let mut found = false;
+        for x in 0..a.map.w {
+            if a.map.walkable(Point::new(x, 0)) {
+                found = true;
+            }
+        }
+        assert!(found);
+    }
+
+    #[test]
+    fn west_edge_has_a_walkable_gap_to_the_marsh() {
+        let a = homestead_area();
+        let mut found = false;
+        for y in 0..a.map.h {
+            if a.map.walkable(Point::new(0, y)) {
+                found = true;
+            }
+        }
+        assert!(found);
+    }
+}
