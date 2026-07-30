@@ -261,3 +261,37 @@ mod tests {
         assert!(got_bite, "should hook a bite in stocked shallow spring water");
     }
 
+    #[test]
+    fn careful_angler_lands_the_fish() {
+        let mut rng = Rng::new(7);
+        let mut s = Session::new(WaterType::Shallow);
+        let c = ctx();
+        // Get to a bite.
+        for _ in 0..12 {
+            wait_tick(&mut s, &c, &mut rng);
+            if matches!(s.phase, Phase::Bite { .. }) {
+                break;
+            }
+        }
+        assert!(matches!(s.phase, Phase::Bite { .. }));
+        hook(&mut s, &c);
+        // Play it smart: ease when the fish darts, reel when it's calm.
+        for _ in 0..80 {
+            if s.is_over() {
+                break;
+            }
+            let darting = matches!(&s.phase, Phase::Fighting(f) if f.darting);
+            if darting {
+                ease(&mut s, &mut rng);
+            } else {
+                reel(&mut s, &mut rng);
+            }
+        }
+        match &s.phase {
+            Phase::Landed(catch) => {
+                let def = fish::by_id(catch.fish_id).unwrap();
+                assert!(catch.size >= def.size_min && catch.size <= def.size_max);
+                assert!(catch.value() > 0);
+            }
+            other => panic!("expected to land the fish, got {:?}", phase_name(other)),
+        }
