@@ -59,3 +59,32 @@ mod tests {
         // player starts on walkable ground
         assert!(map.walkable(area.start));
 
+        // there is deep water to fish in the middle of the lake
+        let mut has_deep = false;
+        for y in 0..map.h {
+            for x in 0..map.w {
+                if map.get(Point::new(x, y)) == crate::tile::Tile::DeepWater {
+                    has_deep = true;
+                }
+            }
+        }
+        assert!(has_deep);
+
+        // west edge open to the Homestead
+        let mut west_open = false;
+        for y in 0..map.h {
+            if map.walkable(Point::new(0, y)) {
+                west_open = true;
+            }
+        }
+        assert!(west_open);
+
+        // east edge open to the Deep Lake
+        let mut east_open = false;
+        for y in 0..map.h {
+            if map.walkable(Point::new(map.w - 1, y)) {
+                east_open = true;
+            }
+        }
+        assert!(east_open);
+
