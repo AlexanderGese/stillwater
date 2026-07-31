@@ -88,3 +88,13 @@ mod tests {
         }
         assert!(east_open);
 
+        // north edge open to the River
+        let mut north_open = false;
+        for x in 0..map.w {
+            if map.walkable(Point::new(x, 0)) {
+                north_open = true;
+            }
+        }
+        assert!(north_open);
+    }
+}
