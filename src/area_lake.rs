@@ -32,3 +32,30 @@ pub fn lake_area() -> Area {
 #....~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~....#\n\
 ,,...~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~....#\n\
 #.T..~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~..T.#\n\
+#....~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~....#\n\
+#......................................................................#\n\
+#....o......o......o......o......o......o......o......o......o.........#\n\
+#..T....T....T....T....T....T....T....T....T....T....T....T....T....T..#\n\
+#......................................................................#\n\
+########################################################################";
+    // Player starts on the little jetty on the east shore, right at the
+    // water's edge.
+    parse_area_water("Stillwater Lake", Point::new(68, 13), template, None)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::geom::Point;
+
+    #[test]
+    fn lake_area_is_valid() {
+        let area = lake_area();
+        let map = &area.map;
+
+        // sane, big dimensions
+        assert!(map.w >= 60 && map.h >= 24);
+
+        // player starts on walkable ground
+        assert!(map.walkable(area.start));
+
