@@ -32,3 +32,26 @@ pub fn town_area() -> Area {
 #...###########...##########....,,,,....##########...###########...#\n\
 #...###########...##########....,,,,....##########...###########...#\n\
 #...............................,,,,...............................#\n\
+#.T.............T.............T.,,,,..T............T.............T.#\n\
+################################,,,,################################";
+    parse_area_water("Town", Point::new(33, 9), template, None)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::geom::Point;
+    use crate::tile::Tile;
+
+    #[test]
+    fn builds_and_is_big_enough() {
+        let a = town_area();
+        assert!(a.map.w >= 64 && a.map.h >= 24);
+    }
+
+    #[test]
+    fn start_is_walkable() {
+        let a = town_area();
+        assert!(a.map.walkable(a.start));
+    }
+
