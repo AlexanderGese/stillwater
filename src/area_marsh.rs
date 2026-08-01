@@ -32,3 +32,29 @@ pub fn marsh_area() -> Area {
 #~~~~..~~~~~~~~~~x~~~.~xx~~~~T~~~,.~~o~~x~~~~~~xx~~~~~~~~~~~~~~T~~~#\n\
 #~~~~~.~~~~~~~~T~x~~~~~xx~~~~~~~~.~~~~~~xT~~~~~xx~~~~~~~~~~~~~~~~T~#\n\
 #~~~~~~~~~~~~~~~~x~~~~~xx~~~~~T~~~~~~~~~x~~~~~~xx~~~~~~~~~~~~~~~~~~#\n\
+#~~~~~~~~~~~~~T~~x~~~~~xx~~~~~~~~~~~~~~~x~~~~~~xx~~~~~~~~~~~~~~~~~~#\n\
+####################################################################";
+    parse_area_water("The Marsh", Point::new(6, 13), template, Some(WaterType::Marsh))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::geom::Point;
+
+    #[test]
+    fn marsh_area_is_valid() {
+        let a = marsh_area();
+        assert!(a.map.w >= 60 && a.map.h >= 22);
+        assert!(a.map.walkable(a.start));
+
+        let mut has_water = false;
+        for y in 0..a.map.h {
+            for x in 0..a.map.w {
+                if a.map.get(Point::new(x, y)).is_water() {
+                    has_water = true;
+                }
+            }
+        }
+        assert!(has_water);
+
