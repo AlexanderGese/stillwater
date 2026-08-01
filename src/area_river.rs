@@ -62,3 +62,14 @@ mod tests {
         }
         assert!(has_water);
 
+        // The south edge (bottom border) has an open, walkable crossing
+        // point down to the Lake.
+        let mut south_open = false;
+        for x in 0..a.map.w {
+            if a.map.walkable(Point::new(x, a.map.h - 1)) {
+                south_open = true;
+            }
+        }
+        assert!(south_open);
+    }
+}
