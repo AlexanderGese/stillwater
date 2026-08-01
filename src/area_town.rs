@@ -55,3 +55,29 @@ mod tests {
         assert!(a.map.walkable(a.start));
     }
 
+    #[test]
+    fn has_a_notice_board() {
+        let a = town_area();
+        let mut count = 0;
+        for y in 0..a.map.h {
+            for x in 0..a.map.w {
+                if a.map.get(Point::new(x, y)) == Tile::Sign {
+                    count += 1;
+                }
+            }
+        }
+        assert!(count >= 1);
+    }
+
+    #[test]
+    fn south_edge_has_a_walkable_opening() {
+        let a = town_area();
+        let mut found = false;
+        for x in 0..a.map.w {
+            if a.map.walkable(Point::new(x, a.map.h - 1)) {
+                found = true;
+            }
+        }
+        assert!(found);
+    }
+}
