@@ -58,3 +58,12 @@ mod tests {
         }
         assert!(has_water);
 
+        let mut east_open = false;
+        for y in 0..a.map.h {
+            if a.map.walkable(Point::new(a.map.w - 1, y)) {
+                east_open = true;
+            }
+        }
+        assert!(east_open);
+    }
+}
