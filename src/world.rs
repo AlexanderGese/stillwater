@@ -27,3 +27,37 @@ pub struct Exit {
     pub project: Option<usize>,
 }
 
+pub struct World {
+    areas: Vec<Area>,
+    exits: Vec<Vec<Exit>>,
+    funded: Vec<bool>,
+    current: usize,
+}
+
+impl World {
+    pub fn new() -> World {
+        let areas = vec![
+            homestead_area(),
+            lake_area(),
+            town_area(),
+            river_area(),
+            marsh_area(),
+            deeplake_area(),
+        ];
+        let e = |dir, to, project| Exit { dir, to, project };
+        let exits = vec![
+            // HOMESTEAD (hub)
+            vec![
+                e(Dir::East, LAKE, None),
+                e(Dir::North, TOWN, None),
+                e(Dir::West, MARSH, Some(0)), // Clear the Reeds
+            ],
+            // LAKE
+            vec![
+                e(Dir::West, HOMESTEAD, None),
+                e(Dir::North, RIVER, Some(1)),   // Mend the River Path
+                e(Dir::East, DEEPLAKE, Some(2)), // Repair the Rowboat
+            ],
+            // TOWN
+            vec![e(Dir::South, HOMESTEAD, None)],
+            // RIVER
