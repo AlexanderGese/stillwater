@@ -58,3 +58,34 @@ pub fn dock_area() -> Area {
     parse_area("Dock", Point::new(3, 4), template)
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::geom::Point;
+    use crate::tile::Tile;
+    #[test]
+    fn parses_dimensions_and_tiles() {
+        let a = parse_area("t", Point::new(1, 1), "###\n#.~\n###");
+        assert_eq!(a.map.w, 3);
+        assert_eq!(a.map.h, 3);
+        assert_eq!(a.map.get(Point::new(0, 0)), Tile::Wall);
+        assert_eq!(a.map.get(Point::new(1, 1)), Tile::Grass);
+        assert_eq!(a.map.get(Point::new(2, 1)), Tile::ShallowWater);
+    }
+    #[test]
+    fn dock_area_is_valid() {
+        let a = dock_area();
+        assert!(a.map.w >= 10 && a.map.h >= 6);
+        assert!(a.map.walkable(a.start)); // player starts on walkable ground
+        // there is at least one water tile to fish later
+        let mut has_water = false;
+        for y in 0..a.map.h {
+            for x in 0..a.map.w {
+                if a.map.get(Point::new(x, y)).is_water() {
+                    has_water = true;
+                }
+            }
+        }
+        assert!(has_water);
+    }
+}
