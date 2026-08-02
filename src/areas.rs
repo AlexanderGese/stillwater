@@ -44,3 +44,17 @@ pub fn parse_area_water(
     }
 }
 
+pub fn dock_area() -> Area {
+    // A cozy lakeside: walled yard, a dock (=) reaching into shallow (~) then deep (≈) water.
+    let template = "\
+################\n\
+#..B.........~~#\n\
+#............~≈#\n\
+#....,,,======~#\n\
+#....,.......~≈#\n\
+#..SH,.......~~#\n\
+#............~~#\n\
+################";
+    parse_area("Dock", Point::new(3, 4), template)
+}
+
