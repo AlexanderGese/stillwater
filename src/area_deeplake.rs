@@ -32,3 +32,36 @@ pub fn deeplake_area() -> Area {
 ####################################################################";
     // Start at the tip of the long dock, standing over open water to cast —
     // the biggest fish in Stillwater lurk in the deep beyond it.
+    parse_area_water("The Deep Lake", Point::new(42, 13), template, None)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::geom::Point;
+
+    #[test]
+    fn builds_and_is_valid() {
+        let area = deeplake_area();
+        assert!(area.map.w >= 60 && area.map.h >= 24);
+        assert!(area.map.walkable(area.start));
+
+        let mut has_deep_water = false;
+        for y in 0..area.map.h {
+            for x in 0..area.map.w {
+                if area.map.get(Point::new(x, y)) == crate::tile::Tile::DeepWater {
+                    has_deep_water = true;
+                }
+            }
+        }
+        assert!(has_deep_water);
+
+        let mut west_edge_open = false;
+        for y in 0..area.map.h {
+            if area.map.walkable(Point::new(0, y)) {
+                west_edge_open = true;
+            }
+        }
+        assert!(west_edge_open);
+    }
+}
