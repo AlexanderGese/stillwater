@@ -61,3 +61,17 @@ impl World {
             // TOWN
             vec![e(Dir::South, HOMESTEAD, None)],
             // RIVER
+            vec![e(Dir::South, LAKE, Some(1))],
+            // MARSH
+            vec![e(Dir::East, HOMESTEAD, Some(0))],
+            // DEEPLAKE
+            vec![e(Dir::West, LAKE, Some(2))],
+        ];
+        World {
+            areas,
+            exits,
+            funded: vec![false; restore::PROJECTS.len()],
+            current: HOMESTEAD,
+        }
+    }
+
