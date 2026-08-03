@@ -105,3 +105,29 @@ impl World {
         }
     }
 
+    /// Resolve an attempt to leave the current area heading `dir`.
+    /// Returns None if there's no exit that way; Ok((area, entry)) if it's open;
+    /// Err(project name) if a restoration project still gates it.
+    pub fn exit_toward(&self, dir: Dir) -> Option<Result<(usize, Point), &'static str>> {
+        let exit = *self.exits[self.current].iter().find(|e| e.dir == dir)?;
+        match exit.project {
+            Some(p) if !self.is_funded(p) => {
+                Some(Err(restore::project(p).map(|d| d.name).unwrap_or("???")))
+            }
+            _ => {
+                let entry = entry_point(&self.areas[exit.to].map, opposite(dir));
+                Some(Ok((exit.to, entry)))
+            }
+        }
+    }
+}
+
+fn opposite(d: Dir) -> Dir {
+    match d {
+        Dir::North => Dir::South,
+        Dir::South => Dir::North,
+        Dir::East => Dir::West,
+        Dir::West => Dir::East,
+    }
+}
+
