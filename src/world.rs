@@ -164,3 +164,25 @@ fn entry_point(map: &Map, side: Dir) -> Point {
     found.unwrap_or(Point::new(cx, cy))
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn hub_has_open_and_locked_exits() {
+        let w = World::new();
+        // East to the Lake is always open.
+        assert!(matches!(w.exit_toward(Dir::East), Some(Ok((LAKE, _)))));
+        // West to the Marsh is gated by project 0 until funded.
+        assert!(matches!(w.exit_toward(Dir::West), Some(Err(_))));
+        // No exit south from the hub.
+        assert!(w.exit_toward(Dir::South).is_none());
+    }
+
+    #[test]
+    fn funding_opens_the_marsh() {
+        let mut w = World::new();
+        w.fund(0);
+        assert!(matches!(w.exit_toward(Dir::West), Some(Ok((MARSH, _)))));
+    }
+}
