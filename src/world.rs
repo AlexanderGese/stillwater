@@ -75,3 +75,33 @@ impl World {
         }
     }
 
+    pub fn area(&self) -> &Area {
+        &self.areas[self.current]
+    }
+    pub fn map(&self) -> &Map {
+        &self.areas[self.current].map
+    }
+    pub fn area_name(&self) -> &str {
+        &self.areas[self.current].name
+    }
+    pub fn current(&self) -> usize {
+        self.current
+    }
+    pub fn set_current(&mut self, i: usize) {
+        if i < self.areas.len() {
+            self.current = i;
+        }
+    }
+    pub fn water_kind(&self) -> Option<WaterType> {
+        self.areas[self.current].water_kind
+    }
+
+    pub fn is_funded(&self, project: usize) -> bool {
+        project < self.funded.len() && self.funded[project]
+    }
+    pub fn fund(&mut self, project: usize) {
+        if project < self.funded.len() {
+            self.funded[project] = true;
+        }
+    }
+
