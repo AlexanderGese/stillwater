@@ -131,3 +131,36 @@ fn opposite(d: Dir) -> Dir {
     }
 }
 
+/// Find a walkable tile to drop the player on when they arrive at a map's `side`
+/// edge. Scans the edge for the walkable tile nearest the center.
+fn entry_point(map: &Map, side: Dir) -> Point {
+    let (w, h) = (map.w, map.h);
+    let cy = h / 2;
+    let cx = w / 2;
+    // walkable tile on column `x` nearest the vertical center
+    let col_near = |x: i32| -> Option<Point> {
+        (0..h).find_map(|dy| {
+            [cy + dy, cy - dy]
+                .into_iter()
+                .find(|&y| map.walkable(Point::new(x, y)))
+                .map(|y| Point::new(x, y))
+        })
+    };
+    // walkable tile on row `y` nearest the horizontal center
+    let row_near = |y: i32| -> Option<Point> {
+        (0..w).find_map(|dx| {
+            [cx + dx, cx - dx]
+                .into_iter()
+                .find(|&x| map.walkable(Point::new(x, y)))
+                .map(|x| Point::new(x, y))
+        })
+    };
+    let found = match side {
+        Dir::West => (0..w).find_map(col_near),
+        Dir::East => (0..w).rev().find_map(col_near),
+        Dir::North => (0..h).find_map(row_near),
+        Dir::South => (0..h).rev().find_map(row_near),
+    };
+    found.unwrap_or(Point::new(cx, cy))
+}
+
