@@ -21,3 +21,36 @@ impl Journal {
         }
     }
 
+    /// Record a landed fish: mark its species seen, bump the record if larger,
+    /// and increment the lifetime catch count. AGENT: implement (guard the id
+    /// against the vec length; never panic on an unknown id).
+    pub fn record_catch(&mut self, c: &Catch) {
+        let id = c.fish_id as usize;
+        if id < self.seen.len() {
+            self.seen[id] = true;
+            if c.size > self.record[id] {
+                self.record[id] = c.size;
+            }
+            self.caught_total += 1;
+        }
+    }
+
+    pub fn is_seen(&self, id: u16) -> bool {
+        let idx = id as usize;
+        idx < self.seen.len() && self.seen[idx]
+    }
+
+    pub fn record_size(&self, id: u16) -> u16 {
+        let idx = id as usize;
+        if idx < self.record.len() {
+            self.record[idx]
+        } else {
+            0
+        }
+    }
+
+    /// Distinct species seen so far.
+    pub fn seen_count(&self) -> usize {
+        self.seen.iter().filter(|&&s| s).count()
+    }
+
