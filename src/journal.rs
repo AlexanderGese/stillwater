@@ -176,3 +176,10 @@ mod tests {
         assert!(!journal.is_seen(9999));
     }
 
+    #[test]
+    fn record_size_on_unseen_species_returns_zero() {
+        let journal = Journal::new();
+        assert_eq!(journal.record_size(1), 0);
+        assert_eq!(journal.record_size(50), 0);
+    }
+}
