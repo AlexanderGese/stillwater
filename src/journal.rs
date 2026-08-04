@@ -54,3 +54,34 @@ impl Journal {
         self.seen.iter().filter(|&&s| s).count()
     }
 
+    /// Total number of species in the game.
+    pub fn total_species(&self) -> usize {
+        fish::FISH.len()
+    }
+
+    pub fn caught_total(&self) -> u32 {
+        self.caught_total
+    }
+
+    pub fn is_complete(&self) -> bool {
+        self.seen_count() == self.total_species()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn fresh_journal_empty() {
+        let journal = Journal::new();
+        assert_eq!(journal.seen_count(), 0);
+        assert!(!journal.is_complete());
+    }
+
+    #[test]
+    fn record_catch_marks_species_seen() {
+        let mut journal = Journal::new();
+        let catch = Catch { fish_id: 1, size: 12 };
+        journal.record_catch(&catch);
+
