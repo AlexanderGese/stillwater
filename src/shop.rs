@@ -27,3 +27,31 @@ pub struct Offer {
 pub fn offers(current_rod_tier: u8, current_bait_id: u16) -> Vec<Offer> {
     let mut result = Vec::new();
 
+    // Add the next rod tier if it exists
+    let next_rod_tier = current_rod_tier + 1;
+    if let Some(next_rod) = tackle::RODS.iter().find(|r| r.tier == next_rod_tier) {
+        result.push(Offer {
+            item: ShopItem::Rod(next_rod.tier),
+            name: next_rod.name,
+            price: next_rod.cost,
+            owned: false,
+        });
+    }
+
+    // Add all baits
+    for bait_def in bait::BAIT.iter() {
+        result.push(Offer {
+            item: ShopItem::Bait(bait_def.id),
+            name: bait_def.name,
+            price: bait_def.cost,
+            owned: bait_def.id == current_bait_id,
+        });
+    }
+
+    result
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
