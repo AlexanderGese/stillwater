@@ -85,3 +85,33 @@ mod tests {
         let catch = Catch { fish_id: 1, size: 12 };
         journal.record_catch(&catch);
 
+        assert!(journal.is_seen(1));
+        assert_eq!(journal.record_size(1), 12);
+        assert_eq!(journal.seen_count(), 1);
+        assert_eq!(journal.caught_total(), 1);
+    }
+
+    #[test]
+    fn record_catch_keeps_largest_size() {
+        let mut journal = Journal::new();
+
+        journal.record_catch(&Catch { fish_id: 2, size: 15 });
+        assert_eq!(journal.record_size(2), 15);
+
+        journal.record_catch(&Catch { fish_id: 2, size: 20 });
+        assert_eq!(journal.record_size(2), 20);
+
+        journal.record_catch(&Catch { fish_id: 2, size: 10 });
+        assert_eq!(journal.record_size(2), 20);
+    }
+
+    #[test]
+    fn caught_total_counts_all_catches() {
+        let mut journal = Journal::new();
+        journal.record_catch(&Catch { fish_id: 1, size: 10 });
+        journal.record_catch(&Catch { fish_id: 1, size: 12 });
+        journal.record_catch(&Catch { fish_id: 2, size: 18 });
+
+        assert_eq!(journal.caught_total(), 3);
+    }
+
