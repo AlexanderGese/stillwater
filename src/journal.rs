@@ -146,3 +146,33 @@ mod tests {
         assert_eq!(journal.total_species(), fish::FISH.len());
     }
 
+    #[test]
+    fn is_complete_when_all_species_seen() {
+        let mut journal = Journal::new();
+        let total = journal.total_species();
+
+        assert!(!journal.is_complete());
+
+        // Record one catch for each species (using ids 1 through total)
+        for id in 1..=total as u16 {
+            journal.record_catch(&Catch { fish_id: id, size: 20 });
+        }
+
+        assert_eq!(journal.seen_count(), total);
+        assert!(journal.is_complete());
+    }
+
+    #[test]
+    fn is_seen_boundary_checks() {
+        let journal = Journal::new();
+
+        // Id 0 is unused (never set to true)
+        assert!(!journal.is_seen(0));
+
+        // Valid id but not yet seen
+        assert!(!journal.is_seen(1));
+
+        // Way out of range
+        assert!(!journal.is_seen(9999));
+    }
+
