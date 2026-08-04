@@ -115,3 +115,34 @@ mod tests {
         assert_eq!(journal.caught_total(), 3);
     }
 
+    #[test]
+    fn out_of_range_id_ignored_safely() {
+        let mut journal = Journal::new();
+        // Should not panic
+        journal.record_catch(&Catch { fish_id: 9999, size: 50 });
+
+        assert!(!journal.is_seen(9999));
+        assert_eq!(journal.record_size(9999), 0);
+        assert_eq!(journal.caught_total(), 0);
+    }
+
+    #[test]
+    fn multiple_species_tracked() {
+        let mut journal = Journal::new();
+        journal.record_catch(&Catch { fish_id: 1, size: 10 });
+        journal.record_catch(&Catch { fish_id: 5, size: 15 });
+        journal.record_catch(&Catch { fish_id: 10, size: 60 });
+
+        assert_eq!(journal.seen_count(), 3);
+        assert!(journal.is_seen(1));
+        assert!(journal.is_seen(5));
+        assert!(journal.is_seen(10));
+        assert!(!journal.is_seen(2));
+    }
+
+    #[test]
+    fn total_species_matches_fish_registry() {
+        let journal = Journal::new();
+        assert_eq!(journal.total_species(), fish::FISH.len());
+    }
+
