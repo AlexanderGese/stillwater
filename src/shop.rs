@@ -84,3 +84,30 @@ mod tests {
         }
     }
 
+    #[test]
+    fn test_current_bait_marked_owned() {
+        let offers_list = offers(0, 3); // Cricket is id 3
+        let bait_offers: Vec<_> = offers_list
+            .iter()
+            .filter(|o| matches!(o.item, ShopItem::Bait(_)))
+            .collect();
+
+        for offer in bait_offers {
+            if let ShopItem::Bait(id) = offer.item {
+                if id == 3 {
+                    assert!(offer.owned, "Bait 3 should be owned");
+                } else {
+                    assert!(!offer.owned, "Bait {} should not be owned", id);
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn test_all_prices_positive() {
+        let offers_list = offers(1, 2);
+        for offer in offers_list {
+            assert!(offer.price > 0, "Offer {} has non-positive price", offer.name);
+        }
+    }
+
