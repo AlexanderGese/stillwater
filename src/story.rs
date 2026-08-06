@@ -96,3 +96,36 @@ pub static OPENING: &[&str] = &[
    \"If you're reading this, I've gone on ahead of you,
    which only means I got to the good water first.
 
+   The lake is quiet now and that's all right - quiet
+   isn't the same as dead, it's just resting. Give it
+   a reason to wake up. Clear what's grown over. Mend
+   what's washed out. Row out past where you can see
+   the bottom, when you're ready.
+
+   Everything you need is already here, or close enough
+   to it. Go on, now. The fish have been waiting longer
+   than you have.
+                                        - Wren\"
+
+                                   [space] continue",
+];
+
+/// The ending, shown once when the valley is fully restored.
+pub static ENDING: &[&str] = &[
+    "\
+   You wake before the alarm, the way you do now, and
+   the valley is already awake ahead of you.
+
+   Herons stalk the clear shallows of the marsh. The
+   river runs bright and talkative over its mended bed,
+   arguing with every stone. Out on the lake a heron-grey
+   mist is lifting off water that finally has somewhere
+   to be.
+
+   Stillwater isn't quiet anymore. It just sounds like
+   itself.
+
+                                   [space] next",
+    "\
+   Neighbors you'd never met start finding the path down.
+
