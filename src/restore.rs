@@ -32,3 +32,6 @@ pub static PROJECTS: &[ProjectDef] = &[
     },
 ];
 
+pub fn project(i: usize) -> Option<&'static ProjectDef> {
+    PROJECTS.get(i)
+}
