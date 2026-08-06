@@ -111,3 +111,21 @@ mod tests {
         }
     }
 
+    #[test]
+    fn test_tier_1_offers_lakecaster() {
+        let offers_list = offers(1, 1);
+        let rod_offer = offers_list.iter().find(|o| matches!(o.item, ShopItem::Rod(_)));
+        assert!(rod_offer.is_some());
+        assert_eq!(rod_offer.unwrap().name, "Lakecaster");
+        assert_eq!(rod_offer.unwrap().price, 2000);
+    }
+
+    #[test]
+    fn test_tier_2_offers_mastercraft() {
+        let offers_list = offers(2, 1);
+        let rod_offer = offers_list.iter().find(|o| matches!(o.item, ShopItem::Rod(_)));
+        assert!(rod_offer.is_some());
+        assert_eq!(rod_offer.unwrap().name, "Mastercraft Rod");
+        assert_eq!(rod_offer.unwrap().price, 8000);
+    }
+}
