@@ -129,3 +129,34 @@ pub static ENDING: &[&str] = &[
     "\
    Neighbors you'd never met start finding the path down.
 
+   Someone from the far side of the ridge brings bread
+   still warm and stays to fish off the dock till dusk.
+   A kid from town asks if the giant in the deep water
+   story is true, and you find yourself saying maybe,
+   the way Wren would have.
+
+   The cottage still leans a little. You've stopped
+   minding. Some things hold their shape by leaning
+   into it, not against it.
+
+                                   [space] next",
+    "\
+   That evening you sit in the chair by the window, and
+   for the first time it fits you rather than her.
+
+   You add today's line to the journal, under sixty
+   years of her hand and now a season of your own. The
+   ink is different. The handwriting will get there.
+
+   Somewhere out past the dark glass, water moves over
+   stone, unhurried, in no rush to be anywhere else.
+   You think she'd call that a good day's work.
+
+   The lake is awake. You're still not done fishing it.
+
+                                   [space] next",
+    "\
+   Later, you bank the stove and sit a moment with the
+   window dark and the whole valley breathing slow around
+   the cottage.
+
