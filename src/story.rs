@@ -65,3 +65,34 @@ pub static OPENING: &[&str] = &[
    was just keeping something the rest of you had
    forgotten how to want.
 
+                                   [space] next",
+    "\
+   The cottage is smaller than you pictured and leans
+   a little, like it's listening for something.
+
+   Inside: a cold stove, a chair by the window worn to
+   the shape of someone who sat there every evening for
+   sixty years, and fishing line strung along the
+   rafters, looped and looped, patient as a spider's web.
+
+   It smells of woodsmoke long gone out, and lake water,
+   and something green.
+
+                                   [space] next",
+    "\
+   On the table, weighted down with a smooth grey stone,
+   you find her journal.
+
+   The leather is cracked soft. Inside: decades of her
+   hand, cramped and sure - weather notes, sketches of
+   fish with their names and their moods, a running tally
+   of mornings that starts the year you were born.
+
+   Tucked in the back cover, a folded note with your
+   name on it in the same hand, newer, shakier.
+
+                                   [space] next",
+    "\
+   \"If you're reading this, I've gone on ahead of you,
+   which only means I got to the good water first.
+
