@@ -32,3 +32,36 @@ pub static OPENING: &[&str] = &[
    itself in silted mud. No boats. No birds calling.
    Just the hush of a place that has been waiting.
 
+                                   [space] next",
+    "\
+   You stop halfway down the path, because your feet
+   remember it before you do.
+
+   You were nine the last summer you came here, feet
+   bare and stung with nettles, Wren teaching you to tie
+   a knot with your tongue between your teeth in
+   concentration. Six weeks of jam jars full of fireflies,
+   thunderstorms watched from the porch wrapped in one
+   blanket, more fish caught by her than you but she
+   always said the numbers were close.
+
+   You didn't know it was the last summer. Nobody tells
+   you that in advance.
+
+                                   [space] next",
+    "\
+   You never knew exactly what happened between her and
+   your grandfather, only that it happened quietly, over
+   years, the way a bank erodes instead of breaks.
+
+   A disagreement about the old farm, maybe, or just two
+   stubborn people who stopped reaching for the phone
+   first. Christmas cards got shorter. Then they stopped.
+   Wren stayed here anyway, alone with the lake, and if
+   it was lonely she never once said so in the letters
+   you did get.
+
+   You think now she wasn't hiding from the family. She
+   was just keeping something the rest of you had
+   forgotten how to want.
+
