@@ -160,3 +160,33 @@ pub static ENDING: &[&str] = &[
    window dark and the whole valley breathing slow around
    the cottage.
 
+   Somewhere out there a heron shifts its weight on one
+   leg. Somewhere a fish turns over just to feel the
+   water move. On the sill, the marsh lure catches the
+   last of the light, hook long gone, still worth keeping.
+
+   Tomorrow there's more lake to get to know. That's the
+   whole of it, really. That's enough.
+
+                                   [space] continue",
+];
+
+/// Shown the first time you land a legendary giant from the deep lake (after
+/// the boss fight).
+pub static LEGEND: &[&str] = &[
+    "\
+   T H E   D E E P   G I V E S   U P   S O M E T H I N G
+
+   The line goes taut and then the lake itself seems to
+   lean back against you, a weight that isn't fighting so
+   much as remembering it used to.
+
+   Your arms burn. The rod bends further than wood should
+   bend. Somewhere under the boat something vast turns
+   over, slow as a thought, and the whole surface flexes
+   like skin.
+
+   You think of every evening Wren sat here saying maybe,
+   never yes, never no. You think, this is what maybe
+   felt like.
+
