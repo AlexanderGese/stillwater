@@ -223,3 +223,32 @@ pub static LEGEND: &[&str] = &[
    Some water, Wren used to say, you fish just to keep it
    company. Now you know exactly what she meant.
 
+                                   [space] continue",
+];
+
+/// A short story beat shown when a restoration project is funded.
+/// project 0 = the marsh, 1 = the river, 2 = the deep lake.
+pub fn beat(project: usize) -> &'static [&'static str] {
+    match project {
+        0 => MARSH_BEAT,
+        1 => RIVER_BEAT,
+        2 => DEEP_BEAT,
+        _ => &[],
+    }
+}
+
+static MARSH_BEAT: &[&str] = &[
+    "\
+   C L E A R   T H E   R E E D S
+
+   You spend three days waist-deep in the shallows,
+   cutting back reed grown thick as fingers, hauling
+   out rot and rusted wire and one entire drowned
+   fencepost nobody will ever explain.
+
+   On the third evening the water starts to move again,
+   finding its old channels like it remembers the way.
+   By morning a heron has already found the new-cut
+   shallows and stands there like it owns the place.
+   Maybe it does.
+
