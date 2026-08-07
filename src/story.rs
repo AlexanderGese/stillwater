@@ -315,3 +315,35 @@ static DEEP_BEAT: &[&str] = &[
    for a long moment before you push off, just letting
    the cottage get small behind you.
 
+                                   [space] continue",
+    "\
+   Out past the shelf where the bottom drops from sight,
+   you rest the oars and let the boat drift.
+
+   Wren used to say something lived down in that cold
+   dark - old as the lake itself, patient, uninterested
+   in anyone's hurry. She never claimed to have caught
+   it. She wasn't sure she wanted to.
+
+   \"Some water,\" she'd say, \"you fish just to keep it
+   company.\"
+
+   You sit with that a while, oars shipped, the whole
+   sky rocking gently on the deep water around you.
+
+                                   [space] continue",
+];
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn all_pages_nonempty(pages: &[&str]) -> bool {
+        !pages.is_empty() && pages.iter().all(|p| !p.trim().is_empty())
+    }
+
+    #[test]
+    fn opening_is_nonempty_and_has_content() {
+        assert!(all_pages_nonempty(OPENING));
+    }
+
