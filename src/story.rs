@@ -252,3 +252,34 @@ static MARSH_BEAT: &[&str] = &[
    shallows and stands there like it owns the place.
    Maybe it does.
 
+                                   [space] continue",
+    "\
+   Snagged in the last stubborn clump of reed you find
+   a lure, sun-faded, hand-tied, hook long since rusted
+   to lace.
+
+   You know the pattern before you turn it over - it's
+   sketched in the journal, page after page, labeled
+   in Wren's cramped hand: \"marsh special, they can't
+   say no to it.\"
+
+   You pocket it. Some things aren't for fishing with.
+   Some things are just for keeping.
+
+                                   [space] continue",
+];
+
+static RIVER_BEAT: &[&str] = &[
+    "\
+   M E N D   T H E   R I V E R   P A T H
+
+   The old path washed out years before you got here,
+   the bank slumped into the current in one long slow
+   collapse. You spend a week hauling stone, driving
+   posts, building the bank back up handful by handful.
+
+   When the current finally runs clean through the new
+   channel, clear over clean gravel instead of choking
+   on silt, you can hear it change - a brighter sound,
+   like the river clearing its throat.
+
