@@ -347,3 +347,36 @@ mod tests {
         assert!(all_pages_nonempty(OPENING));
     }
 
+    #[test]
+    fn ending_is_nonempty_and_has_content() {
+        assert!(all_pages_nonempty(ENDING));
+    }
+
+    #[test]
+    fn legend_is_nonempty_and_has_content() {
+        assert!(all_pages_nonempty(LEGEND));
+    }
+
+    #[test]
+    fn beat_zero_marsh_is_nonempty() {
+        let pages = beat(0);
+        assert!(all_pages_nonempty(pages));
+    }
+
+    #[test]
+    fn beat_one_river_is_nonempty() {
+        let pages = beat(1);
+        assert!(all_pages_nonempty(pages));
+    }
+
+    #[test]
+    fn beat_two_deep_is_nonempty() {
+        let pages = beat(2);
+        assert!(all_pages_nonempty(pages));
+    }
+
+    #[test]
+    fn beat_out_of_range_is_empty() {
+        assert!(beat(9).is_empty());
+    }
+}
