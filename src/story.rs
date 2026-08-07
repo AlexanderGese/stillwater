@@ -283,3 +283,35 @@ static RIVER_BEAT: &[&str] = &[
    on silt, you can hear it change - a brighter sound,
    like the river clearing its throat.
 
+                                   [space] continue",
+    "\
+   Standing on the new-set stones, you remember being
+   eight years old and useless with a rod, Wren crouched
+   beside you at this exact bend.
+
+   \"Don't watch the bait,\" she said. \"Watch the water.
+   It'll tell you where the fish are before your line
+   ever does - a seam here, a slow patch there, a shadow
+   under that far bank that isn't a shadow at all.\"
+
+   You watch the water now. It tells you the same thing
+   it told you then. Some lessons just wait for you to
+   be ready to hear them twice.
+
+                                   [space] continue",
+];
+
+static DEEP_BEAT: &[&str] = &[
+    "\
+   R E P A I R   T H E   R O W B O A T
+
+   The rowboat had gone soft and grey in the boathouse,
+   more moss than wood. You strip it back to bare planks,
+   recaulk every seam, give it two coats of paint the
+   color of a September sky.
+
+   It takes the water like it never left - a little low
+   in the stern, maybe, but sound. You sit at the oars
+   for a long moment before you push off, just letting
+   the cottage get small behind you.
+
