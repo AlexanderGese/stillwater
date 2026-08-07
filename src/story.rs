@@ -190,3 +190,36 @@ pub static LEGEND: &[&str] = &[
    never yes, never no. You think, this is what maybe
    felt like.
 
+                                   [space] next",
+    "\
+   It comes up out of the dark by degrees, first a
+   shadow, then a shape, then more shape than the boat
+   feels ready for.
+
+   Scales like old hammered coin. A jaw scarred pale in
+   places, healed wrong, healed anyway. One eye, black
+   and patient and entirely unbothered, finds yours and
+   holds it.
+
+   Neither of you looks away first. It isn't a contest.
+   It's just two old things taking stock of each other
+   across a lot of water and a little time.
+
+                                   [space] next",
+    "\
+   You could keep it. Weigh it, measure it, tell the
+   story on the dock till you're the age Wren was. Some
+   part of you wants to, badly, the way you want to keep
+   anything that finally proves itself real.
+
+   Instead you ease the hook free with wet hands gone
+   careful, and hold the great cold length of it steady
+   in the shallows until it finds its own strength again.
+
+   It doesn't thrash off in a hurry. It just goes, the
+   way the lake goes still after a stone, and leaves you
+   sitting there soaked and grinning at nothing.
+
+   Some water, Wren used to say, you fish just to keep it
+   company. Now you know exactly what she meant.
+
