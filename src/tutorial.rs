@@ -62,3 +62,23 @@ pub static HOWTO: &[&str] = &[
 /// Number of steps in the guided (step-by-step) tutorial.
 pub const GUIDE_STEPS: usize = 4;
 
+/// The banner shown for the current guided-tutorial step.
+pub fn guide_prompt(step: usize) -> &'static str {
+    match step {
+        0 => "STEP 1 of 4:  walk to the water's edge and face the water (the ~ tiles)",
+        1 => "STEP 2 of 4:  press [e] to cast your line into the water",
+        2 => "STEP 3 of 4:  wait for a bite, [e] to hook, then [w]/[s] to land your first fish!",
+        _ => "STEP 4 of 4:  sleep at your bed (stand by the B and press [e]) to start a new day",
+    }
+}
+
+/// Has the player satisfied the given guided-tutorial step?
+pub fn guide_done(step: usize, g: &Game) -> bool {
+    match step {
+        0 => g.faces_water(),
+        1 => matches!(g.mode, Mode::Fishing(_)),
+        2 => g.journal.caught_total() >= 1,
+        _ => g.calendar.day >= 2,
+    }
+}
+
