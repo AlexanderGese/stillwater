@@ -32,3 +32,27 @@ impl Settings {
         }
     }
 
+    pub fn toggle(&mut self, i: usize) {
+        match i {
+            0 => self.hints = !self.hints,
+            1 => self.color = !self.color,
+            2 => self.guide = !self.guide,
+            _ => {}
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn toggles_round_trip() {
+        let mut s = Settings::new();
+        assert!(s.get(1));
+        s.toggle(1);
+        assert!(!s.get(1));
+        s.toggle(1);
+        assert!(s.get(1));
+        assert_eq!(Settings::count(), 3);
+    }
+}
