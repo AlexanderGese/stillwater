@@ -30,3 +30,35 @@ pub static HOWTO: &[&str] = &[
 
    Once a fish is on, watch the two bars:
 
+        W  =  REEL it in   (fills the catch bar)
+        S  =  EASE off     (bleeds the tension)
+
+   Reel when the line is steady \u{2014} but EASE the moment the fish
+   DARTS, or the line will snap and it gets away.
+
+                                   [space] next",
+    "\
+        G R O W I N G
+
+   Landed fish earn gold and fill your JOURNAL (press  J ).
+
+   Spend gold at the SHOP  ( H )  on better rods and bait.
+   Sleep in your BED  ( B )  to pass into the next day \u{2014} the
+   seasons and weather change what's biting.
+
+                                   [space] next",
+    "\
+        R E S T O R I N G   T H E   V A L L E Y
+
+   Read the NOTICE BOARD  ( N )  in town to fund restoration
+   projects. Each one opens a new stretch of water \u{2014} the marsh,
+   the river, and the deep lake \u{2014} with new fish to discover.
+
+   Press  ?  any time to see the controls.
+
+                                 [space] B E G I N",
+];
+
+/// Number of steps in the guided (step-by-step) tutorial.
+pub const GUIDE_STEPS: usize = 4;
+
