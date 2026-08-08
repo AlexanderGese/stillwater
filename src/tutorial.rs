@@ -82,3 +82,23 @@ pub fn guide_done(step: usize, g: &Game) -> bool {
     }
 }
 
+/// A short, situation-specific hint for the current game state, or None.
+pub fn hint(g: &Game) -> Option<&'static str> {
+    match &g.mode {
+        Mode::Fishing(s) => Some(match &s.phase {
+            Phase::Waiting { .. } => "hold still and wait for a bite... (press any key to wait)",
+            Phase::Bite { .. } => "a bite! press [e] RIGHT NOW to set the hook!",
+            Phase::Fighting(f) => {
+                if f.darting {
+                    "it's thrashing! press [s] to EASE off before the line snaps!"
+                } else {
+                    "line's steady \u{2014} press [w] to REEL it in!"
+                }
+            }
+            Phase::Landed(_) | Phase::Lost(_) => "press [e] to carry on",
+        }),
+        Mode::Explore => explore_hint(g),
+        _ => None,
+    }
+}
+
