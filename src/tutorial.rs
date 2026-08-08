@@ -102,3 +102,37 @@ pub fn hint(g: &Game) -> Option<&'static str> {
     }
 }
 
+fn explore_hint(g: &Game) -> Option<&'static str> {
+    // Guide the very first catch.
+    if g.journal.caught_total() == 0 {
+        if g.faces_water() {
+            return Some("you're facing the water \u{2014} press [e] to cast your line!");
+        }
+        return Some("walk to the water (the ~ tiles), face it, and press [e] to fish");
+    }
+    // Tired? Point them to bed.
+    if g.player.energy <= 20 {
+        return Some("running low on energy \u{2014} sleep at your bed [B] to start a fresh day");
+    }
+    // Enough gold for the first upgrade.
+    if g.player.rod_tier == 0 && g.player.gold >= 500 {
+        return Some("you've saved enough \u{2014} the shop [H] has a rod that casts farther");
+    }
+    // In town: nudge toward restoration.
+    if g.world.current() == world::TOWN {
+        return Some("read the notice board [N] to fund restoration and open new waters");
+    }
+    // In a freshly-opened wild area, encourage discovery.
+    if matches!(
+        g.world.current(),
+        world::RIVER | world::MARSH | world::DEEPLAKE
+    ) {
+        return Some("new waters hold new fish \u{2014} cast around and check your journal [j]");
+    }
+    // Once established, nudge toward better bait.
+    if g.player.bait_id == 1 && g.player.gold >= 200 && g.journal.caught_total() >= 3 {
+        return Some("better bait at the shop [H] tempts rarer fish onto the hook");
+    }
+    // Gentle steady-state reminder.
+    if g.faces_water() {
+        return Some("press [e] to cast");
