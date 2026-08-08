@@ -136,3 +136,6 @@ fn explore_hint(g: &Game) -> Option<&'static str> {
     // Gentle steady-state reminder.
     if g.faces_water() {
         return Some("press [e] to cast");
+    }
+    Some("catch fish for gold, upgrade at the shop [H], open new areas at the town board [N]")
+}
