@@ -132,3 +132,37 @@ impl Game {
         self.mode = Mode::Story { page: 0 };
     }
 
+    pub fn apply(&mut self, a: Action) {
+        if a == Action::Quit {
+            self.running = false;
+            return;
+        }
+        match self.mode {
+            Mode::Menu { .. } => self.apply_menu(a),
+            Mode::Settings { .. } => self.apply_settings(a),
+            Mode::Story { .. } => self.apply_story(a),
+            Mode::Explore => self.apply_explore(a),
+            Mode::Fishing(_) => self.apply_fishing(a),
+            Mode::Shop => self.apply_shop(a),
+            Mode::Journal => self.apply_journal(a),
+            Mode::Restore => self.apply_restore(a),
+            Mode::Help => self.mode = Mode::Explore, // any key closes help
+        }
+        self.tick_guide();
+    }
+
+    /// Advance the step-by-step tutorial when the current step is satisfied.
+    fn tick_guide(&mut self) {
+        if let Some(s) = self.guide_step {
+            if crate::tutorial::guide_done(s, self) {
+                if s + 1 >= crate::tutorial::GUIDE_STEPS {
+                    self.guide_step = None;
+                    self.message =
+                        "Tutorial complete! You've got it. Enjoy your days at Stillwater.".to_string();
+                } else {
+                    self.guide_step = Some(s + 1);
+                }
+            }
+        }
+    }
+
