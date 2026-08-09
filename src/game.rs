@@ -30,3 +30,25 @@ pub enum Action {
     Quit,
 }
 
+pub enum Mode {
+    Menu { sel: usize },     // main menu
+    Settings { sel: usize }, // options screen
+    Story { page: usize },   // paged story/intro text
+    Explore,
+    Fishing(Session),
+    Shop,
+    Journal,
+    Restore,
+    Help,
+}
+
+/// Where to go when the current story sequence finishes.
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum StoryReturn {
+    Howto,   // opening -> the how-to-play pages
+    Play,    // how-to -> the world (and start the guided tutorial)
+    Explore, // into the world
+    Menu,    // back to the main menu
+    Ending,  // this beat -> the ending -> the world
+}
+
