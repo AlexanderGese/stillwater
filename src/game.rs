@@ -52,3 +52,30 @@ pub enum StoryReturn {
     Ending,  // this beat -> the ending -> the world
 }
 
+pub struct Game {
+    pub world: World,
+    pub player: Player,
+    pub rng: Rng,
+    pub calendar: Calendar,
+    pub clock: Clock,
+    pub weather: Weather,
+    pub weather_next: Weather,
+    pub journal: Journal,
+    pub mode: Mode,
+    pub running: bool,
+    pub message: String,
+    pub seed: u64,
+    pub loaded_from_save: bool,
+    pub story_pages: &'static [&'static str],
+    pub story_next: StoryReturn,
+    pub ending_shown: bool,
+    pub legend_shown: bool,
+    pub settings: Settings,
+    pub guide_step: Option<usize>, // step-by-step tutorial progress
+}
+
+impl Game {
+    pub fn new() -> Game {
+        Game::with_seed(1)
+    }
+
