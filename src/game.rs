@@ -196,3 +196,32 @@ impl Game {
         }
     }
 
+    fn apply_menu(&mut self, a: Action) {
+        let opts = self.menu_options();
+        let n = opts.len();
+        let sel = if let Mode::Menu { sel } = self.mode { sel } else { 0 };
+        match a {
+            Action::Move(Dir::North) => self.mode = Mode::Menu { sel: (sel + n - 1) % n },
+            Action::Move(Dir::South) => self.mode = Mode::Menu { sel: (sel + 1) % n },
+            Action::Buy(k) => {
+                let i = (k as usize).wrapping_sub(1);
+                if i < n {
+                    self.activate_menu(opts[i]);
+                }
+            }
+            Action::Interact => self.activate_menu(opts[sel]),
+            _ => {}
+        }
+    }
+
+    fn activate_menu(&mut self, opt: &str) {
+        match opt {
+            "Continue" => self.mode = Mode::Explore,
+            "New Game" => self.start_new(),
+            "How to Play" => self.show_story(crate::tutorial::HOWTO, StoryReturn::Menu),
+            "Settings" => self.mode = Mode::Settings { sel: 0 },
+            "Quit" => self.running = false,
+            _ => {}
+        }
+    }
+
