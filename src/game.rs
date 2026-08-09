@@ -79,3 +79,35 @@ impl Game {
         Game::with_seed(1)
     }
 
+    pub fn with_seed(seed: u64) -> Game {
+        let world = World::new();
+        let start = world.area().start;
+        let calendar = Calendar::new();
+        let mut rng = Rng::new(seed);
+        let weather = weather::roll(calendar.season, &mut rng);
+        let weather_next = weather::roll(calendar.season, &mut rng);
+        let mut player = Player::new(start);
+        player.bait_id = 1; // start with a worm on the hook
+        Game {
+            world,
+            player,
+            rng,
+            calendar,
+            clock: Clock::new(),
+            weather,
+            weather_next,
+            journal: Journal::new(),
+            mode: Mode::Explore,
+            running: true,
+            message: String::new(),
+            seed,
+            loaded_from_save: false,
+            story_pages: &[],
+            story_next: StoryReturn::Explore,
+            ending_shown: false,
+            legend_shown: false,
+            settings: Settings::new(),
+            guide_step: None,
+        }
+    }
+
