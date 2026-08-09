@@ -166,3 +166,33 @@ impl Game {
         }
     }
 
+    fn apply_settings(&mut self, a: Action) {
+        let n = Settings::count();
+        let sel = if let Mode::Settings { sel } = self.mode {
+            sel
+        } else {
+            0
+        };
+        match a {
+            Action::Move(Dir::North) => self.mode = Mode::Settings { sel: (sel + n - 1) % n },
+            Action::Move(Dir::South) => self.mode = Mode::Settings { sel: (sel + 1) % n },
+            Action::Interact => self.settings.toggle(sel),
+            Action::Buy(k) => {
+                let i = (k as usize).wrapping_sub(1);
+                if i < n {
+                    self.settings.toggle(i);
+                }
+            }
+            Action::Back => self.mode = Mode::Menu { sel: 0 },
+            _ => {}
+        }
+    }
+
+    pub fn menu_options(&self) -> &'static [&'static str] {
+        if self.loaded_from_save {
+            &["Continue", "New Game", "How to Play", "Settings", "Quit"]
+        } else {
+            &["New Game", "How to Play", "Settings", "Quit"]
+        }
+    }
+
