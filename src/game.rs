@@ -111,3 +111,24 @@ impl Game {
         }
     }
 
+    /// Enter the main menu (used at launch).
+    pub fn to_menu(&mut self) {
+        self.mode = Mode::Menu { sel: 0 };
+    }
+
+    /// Reset to a brand-new game and roll into the opening story (keeping the
+    /// player's settings).
+    fn start_new(&mut self) {
+        let seed = self.seed.wrapping_add(0x9E3779B9);
+        let settings = self.settings;
+        *self = Game::with_seed(seed);
+        self.settings = settings;
+        self.show_story(crate::story::OPENING, StoryReturn::Howto);
+    }
+
+    fn show_story(&mut self, pages: &'static [&'static str], next: StoryReturn) {
+        self.story_pages = pages;
+        self.story_next = next;
+        self.mode = Mode::Story { page: 0 };
+    }
+
