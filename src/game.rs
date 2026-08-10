@@ -381,3 +381,37 @@ impl Game {
         }
     }
 
+    fn try_cast(&mut self) {
+        let reach = tackle::rod(self.player.rod_tier).reach;
+        let wk = self.world.water_kind();
+        let mut p = self.player.pos;
+        let mut found = None;
+        for _ in 0..reach {
+            p = p.step(self.player.facing);
+            let t = self.world.map().get(p);
+            if let Some(w) = water_type(t, wk) {
+                found = Some(w);
+                break;
+            }
+            if t == Tile::Wall {
+                break;
+            }
+        }
+        match found {
+            Some(w) => {
+                if self.player.energy <= 0 {
+                    self.message = "You're too worn out to cast. Get some sleep.".to_string();
+                    return;
+                }
+                self.player.energy -= 3;
+                self.clock.advance(10);
+                self.mode = Mode::Fishing(Session::new(w));
+                self.message = "You cast your line out over the water...".to_string();
+                self.check_collapse();
+            }
+            None => {
+                self.message = "No water within reach. Face the lake and try again.".to_string();
+            }
+        }
+    }
+
