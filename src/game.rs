@@ -272,3 +272,33 @@ impl Game {
 
     // ---- explore ----
 
+    fn apply_explore(&mut self, a: Action) {
+        match a {
+            Action::Move(d) => {
+                self.player.facing = d;
+                let target = self.player.pos.step(d);
+                if self.world.map().walkable(target) {
+                    self.player.pos = target;
+                    self.message.clear();
+                    self.clock.advance(2);
+                    self.check_collapse();
+                } else if !self.world.map().in_bounds(target) {
+                    self.try_transition(d);
+                }
+            }
+            Action::Interact => self.interact(),
+            Action::OpenJournal => self.mode = Mode::Journal,
+            Action::OpenHelp => self.mode = Mode::Help,
+            Action::Wait => {
+                self.clock.advance(10);
+                self.check_collapse();
+            }
+            Action::Back => {
+                if self.guide_step.take().is_some() {
+                    self.message = "Tutorial skipped. Press [?] any time for help.".to_string();
+                }
+            }
+            _ => {}
+        }
+    }
+
