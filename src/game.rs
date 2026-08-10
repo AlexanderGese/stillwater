@@ -253,3 +253,22 @@ impl Game {
         }
     }
 
+    /// Does the player currently face a castable stretch of water within reach?
+    pub fn faces_water(&self) -> bool {
+        let reach = tackle::rod(self.player.rod_tier).reach;
+        let mut p = self.player.pos;
+        for _ in 0..reach {
+            p = p.step(self.player.facing);
+            let t = self.world.map().get(p);
+            if t.is_water() {
+                return true;
+            }
+            if t == Tile::Wall {
+                break;
+            }
+        }
+        false
+    }
+
+    // ---- explore ----
+
