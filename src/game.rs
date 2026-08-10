@@ -322,3 +322,35 @@ impl Game {
         }
     }
 
+    fn try_transition(&mut self, d: Dir) {
+        let Some(res) = self.world.exit_toward(d) else {
+            return;
+        };
+        match res {
+            Ok((to, entry)) => {
+                self.world.set_current(to);
+                self.player.pos = entry;
+                self.player.facing = d;
+                self.clock.advance(5);
+                self.message = format!("You make your way to {}.", self.world.area_name());
+                self.check_collapse();
+            }
+            Err(name) => {
+                self.message = format!("The way is blocked \u{2014} you need to \"{}\" first.", name);
+            }
+        }
+    }
+
+    // ---- restoration ----
+
+    fn apply_restore(&mut self, a: Action) {
+        match a {
+            Action::Buy(n) => self.fund_project(n),
+            Action::Back | Action::Interact => {
+                self.mode = Mode::Explore;
+                self.message = "You step back from the board.".to_string();
+            }
+            _ => {}
+        }
+    }
+
