@@ -225,3 +225,31 @@ impl Game {
         }
     }
 
+    fn apply_story(&mut self, a: Action) {
+        let page = if let Mode::Story { page } = self.mode { page } else { 0 };
+        let last = self.story_pages.len().saturating_sub(1);
+        let advance = matches!(a, Action::Back) || page >= last;
+        if advance {
+            match self.story_next {
+                StoryReturn::Howto => self.show_story(crate::tutorial::HOWTO, StoryReturn::Play),
+                StoryReturn::Play => {
+                    self.mode = Mode::Explore;
+                    if self.settings.guide {
+                        self.guide_step = Some(0);
+                    }
+                    self.message = "Your days at Stillwater begin.".to_string();
+                }
+                StoryReturn::Explore => {
+                    self.mode = Mode::Explore;
+                    self.message = "Your days at Stillwater begin.".to_string();
+                }
+                StoryReturn::Menu => self.mode = Mode::Menu { sel: 0 },
+                StoryReturn::Ending => {
+                    self.show_story(crate::story::ENDING, StoryReturn::Explore)
+                }
+            }
+        } else {
+            self.mode = Mode::Story { page: page + 1 };
+        }
+    }
+
