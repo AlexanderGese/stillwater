@@ -302,3 +302,23 @@ impl Game {
         }
     }
 
+    fn interact(&mut self) {
+        let here = self.world.map().get(self.player.pos);
+        let facing = self.world.map().get(self.player.pos.step(self.player.facing));
+        if here == Tile::Bed || facing == Tile::Bed {
+            self.sleep();
+        } else if here == Tile::Shop || facing == Tile::Shop {
+            if self.clock.is_past(Clock::SHOP_CLOSE / 60) {
+                self.message = "The tackle shop is shuttered for the night.".to_string();
+            } else {
+                self.mode = Mode::Shop;
+                self.message = "Welcome! Buy a rod or some bait.".to_string();
+            }
+        } else if here == Tile::Sign || facing == Tile::Sign {
+            self.mode = Mode::Restore;
+            self.message = "You read the restoration notice board.".to_string();
+        } else {
+            self.try_cast();
+        }
+    }
+
