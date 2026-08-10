@@ -415,3 +415,16 @@ impl Game {
         }
     }
 
+    // ---- shop ----
+
+    fn apply_shop(&mut self, a: Action) {
+        match a {
+            Action::Buy(n) => self.buy(n),
+            Action::Back | Action::Interact => {
+                self.mode = Mode::Explore;
+                self.message = "You step away from the counter.".to_string();
+            }
+            _ => {}
+        }
+    }
+
