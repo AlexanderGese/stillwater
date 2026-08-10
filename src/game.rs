@@ -354,3 +354,30 @@ impl Game {
         }
     }
 
+    fn fund_project(&mut self, n: u8) {
+        let i = (n as usize).wrapping_sub(1);
+        let Some(p) = restore::project(i) else {
+            return;
+        };
+        if self.world.is_funded(i) {
+            self.message = format!("\"{}\" is already done.", p.name);
+            return;
+        }
+        if self.player.gold < p.cost {
+            self.message = format!("You need {}g to fund \"{}\".", p.cost, p.name);
+            return;
+        }
+        self.player.gold -= p.cost;
+        self.world.fund(i);
+        self.message = format!("Funded \"{}\"!", p.name);
+        // Play the story beat for this project; if it's the last one, roll the
+        // beat into the ending.
+        let all_done = (0..restore::PROJECTS.len()).all(|k| self.world.is_funded(k));
+        if all_done && !self.ending_shown {
+            self.ending_shown = true;
+            self.show_story(crate::story::beat(i), StoryReturn::Ending);
+        } else {
+            self.show_story(crate::story::beat(i), StoryReturn::Explore);
+        }
+    }
+
