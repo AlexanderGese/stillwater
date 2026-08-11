@@ -461,3 +461,18 @@ impl Game {
         self.mode = Mode::Explore;
     }
 
+    // ---- fishing ----
+
+    fn apply_fishing(&mut self, a: Action) {
+        let ctx = self.bite_ctx();
+        let mut mode = std::mem::replace(&mut self.mode, Mode::Explore);
+        let Mode::Fishing(ref mut s) = mode else {
+            return;
+        };
+
+        if s.is_over() {
+            self.finish_fishing(s);
+            self.clock.advance(2);
+            return; // leave mode = Explore
+        }
+
