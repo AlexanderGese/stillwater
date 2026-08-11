@@ -559,3 +559,35 @@ impl Game {
         self.overnight(false);
     }
 
+    fn overnight(&mut self, passed_out: bool) {
+        self.calendar.advance_day();
+        self.weather = self.weather_next;
+        self.weather_next = weather::roll(self.calendar.season, &mut self.rng);
+        self.clock.reset_morning();
+        self.player.energy = if passed_out { MAX_ENERGY / 2 } else { MAX_ENERGY };
+        self.mode = Mode::Explore;
+        let greet = flavor::greeting(&mut self.rng);
+        let mood = flavor::weather_line(self.weather, &mut self.rng);
+        self.message = if passed_out {
+            format!("You slept where you dropped. {} {}", greet, mood)
+        } else {
+            format!("{} {}", greet, mood)
+        };
+    }
+}
+
+/// The water type a tile represents, if any. An area with a fixed `water_kind`
+/// (river/marsh) types all its water that way; otherwise it's per-tile.
+pub fn water_type(t: Tile, area_water: Option<WaterType>) -> Option<WaterType> {
+    if !t.is_water() {
+        return None;
+    }
+    match area_water {
+        Some(k) => Some(k),
+        None => match t {
+            Tile::DeepWater => Some(WaterType::Deep),
+            _ => Some(WaterType::Shallow),
+        },
+    }
+}
+
