@@ -617,3 +617,37 @@ mod tests {
         assert!(!g.running);
     }
 
+    #[test]
+    fn sleeping_at_the_bed_advances_day_and_restores_energy() {
+        use crate::geom::Point;
+        use crate::tile::Tile;
+        let mut g = Game::new();
+        // Find the bed in the homestead and stand next to it, facing it.
+        let mut placed = false;
+        let map = g.world.map();
+        'outer: for y in 0..map.h {
+            for x in 0..map.w {
+                if map.get(Point::new(x, y)) == Tile::Bed {
+                    for (dir, off) in [
+                        (Dir::South, (0, -1)),
+                        (Dir::North, (0, 1)),
+                        (Dir::East, (-1, 0)),
+                        (Dir::West, (1, 0)),
+                    ] {
+                        let sp = Point::new(x + off.0, y + off.1);
+                        if map.walkable(sp) {
+                            g.player.pos = sp;
+                            g.player.facing = dir;
+                            placed = true;
+                            break 'outer;
+                        }
+                    }
+                }
+            }
+        }
+        assert!(placed, "expected a walkable tile next to a bed");
+        g.player.energy = 5;
+        let day0 = g.calendar.day;
+        g.apply(Action::Interact);
+        assert_eq!(g.calendar.day, day0 + 1);
+        assert_eq!(g.player.energy, MAX_ENERGY);
