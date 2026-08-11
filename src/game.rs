@@ -530,3 +530,32 @@ impl Game {
         }
     }
 
+    fn bite_ctx(&self) -> fishing::BiteCtx {
+        let rod = tackle::rod(self.player.rod_tier);
+        let bait_bonus = bait::by_id(self.player.bait_id)
+            .map(|b| b.bite_bonus)
+            .unwrap_or(0);
+        fishing::BiteCtx {
+            season: self.calendar.season,
+            tod: self.clock.tod(),
+            weather: self.weather,
+            bait_id: self.player.bait_id,
+            bait_bonus,
+            rod_bonus: rod.bite_bonus,
+            line_strength: rod.line_strength,
+        }
+    }
+
+    // ---- time / sleep ----
+
+    fn check_collapse(&mut self) {
+        if self.clock.should_collapse() {
+            self.message = "You could barely keep your eyes open... you drift off.".to_string();
+            self.overnight(true);
+        }
+    }
+
+    fn sleep(&mut self) {
+        self.overnight(false);
+    }
+
