@@ -476,3 +476,29 @@ impl Game {
             return; // leave mode = Explore
         }
 
+        match &s.phase {
+            fishing::Phase::Fighting(_) => {
+                match a {
+                    Action::Move(Dir::North) | Action::Interact => fishing::reel(s, &mut self.rng),
+                    Action::Move(Dir::South) => fishing::ease(s, &mut self.rng),
+                    _ => {}
+                }
+                self.clock.advance(1);
+            }
+            fishing::Phase::Bite { .. } => match a {
+                Action::Interact => fishing::hook(s, &ctx),
+                _ => {
+                    fishing::wait_tick(s, &ctx, &mut self.rng);
+                    self.clock.advance(2);
+                }
+            },
+            _ => {
+                fishing::wait_tick(s, &ctx, &mut self.rng);
+                self.clock.advance(3);
+            }
+        }
+
+        self.mode = mode;
+        self.check_collapse();
+    }
+
