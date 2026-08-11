@@ -428,3 +428,36 @@ impl Game {
         }
     }
 
+    fn buy(&mut self, n: u8) {
+        let offers = shop::offers(self.player.rod_tier, self.player.bait_id);
+        let Some(off) = offers.get((n as usize).wrapping_sub(1)) else {
+            return;
+        };
+        if off.owned {
+            self.message = "You're already using that.".to_string();
+            return;
+        }
+        if self.player.gold < off.price {
+            self.message = format!("Not enough gold for {} ({}g).", off.name, off.price);
+            return;
+        }
+        self.player.gold -= off.price;
+        match off.item {
+            ShopItem::Rod(tier) => {
+                self.player.rod_tier = tier;
+                self.message = format!("You bought the {}! Casts further now.", off.name);
+            }
+            ShopItem::Bait(id) => {
+                self.player.bait_id = id;
+                self.message = format!("You buy {} and tie it on.", off.name);
+            }
+        }
+    }
+
+    // ---- journal ----
+
+    fn apply_journal(&mut self, _a: Action) {
+        // Any key closes the journal.
+        self.mode = Mode::Explore;
+    }
+
