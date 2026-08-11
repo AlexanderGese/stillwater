@@ -591,3 +591,29 @@ pub fn water_type(t: Tile, area_water: Option<WaterType>) -> Option<WaterType> {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::geom::Dir;
+
+    #[test]
+    fn player_only_ever_stands_on_walkable_tiles() {
+        let mut g = Game::new();
+        assert!(g.world.map().walkable(g.player.pos));
+        let dirs = [Dir::North, Dir::East, Dir::South, Dir::West];
+        for i in 0..120 {
+            g.apply(Action::Move(dirs[i % 4]));
+            assert!(
+                g.world.map().walkable(g.player.pos),
+                "stood on a non-walkable tile after moving"
+            );
+        }
+    }
+
+    #[test]
+    fn quit_stops_running() {
+        let mut g = Game::new();
+        g.apply(Action::Quit);
+        assert!(!g.running);
+    }
+
