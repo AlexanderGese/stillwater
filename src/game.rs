@@ -502,3 +502,31 @@ impl Game {
         self.check_collapse();
     }
 
+    fn finish_fishing(&mut self, s: &Session) {
+        match &s.phase {
+            fishing::Phase::Landed(catch) => {
+                self.journal.record_catch(catch);
+                let name = fish::by_id(catch.fish_id).map(|f| f.name).unwrap_or("fish");
+                let value = catch.value();
+                self.player.gold += value;
+                self.message = format!(
+                    "Landed a {} ({}cm)!  +{}g.  {}",
+                    name,
+                    catch.size,
+                    value,
+                    flavor::catch_line(&mut self.rng)
+                );
+                // A legendary giant gets its own story moment.
+                let legendary = fish::by_id(catch.fish_id).map(|f| f.rarity >= 5).unwrap_or(false);
+                if legendary && !self.legend_shown {
+                    self.legend_shown = true;
+                    self.show_story(crate::story::LEGEND, StoryReturn::Explore);
+                }
+            }
+            fishing::Phase::Lost(reason) => {
+                self.message = reason.to_string();
+            }
+            _ => {}
+        }
+    }
+
