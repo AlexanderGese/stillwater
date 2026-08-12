@@ -651,3 +651,27 @@ mod tests {
         g.apply(Action::Interact);
         assert_eq!(g.calendar.day, day0 + 1);
         assert_eq!(g.player.energy, MAX_ENERGY);
+    }
+
+    #[test]
+    fn staying_up_past_two_am_collapses_into_next_day() {
+        let mut g = Game::new();
+        let day0 = g.calendar.day;
+        for _ in 0..200 {
+            g.apply(Action::Wait);
+        }
+        assert_eq!(g.calendar.day, day0 + 1);
+        assert_eq!(g.player.energy, MAX_ENERGY / 2);
+    }
+
+    #[test]
+    fn buying_a_rod_spends_gold_and_upgrades() {
+        let mut g = Game::new();
+        g.mode = Mode::Shop;
+        g.player.gold = 1000;
+        // Offer 1 is the next rod (Fiberglass, 500g).
+        g.apply(Action::Buy(1));
+        assert_eq!(g.player.rod_tier, 1);
+        assert_eq!(g.player.gold, 500);
+    }
+
