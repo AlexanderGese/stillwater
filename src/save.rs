@@ -105,3 +105,37 @@ pub fn save(g: &Game, path: &str) -> std::io::Result<()> {
     Ok(())
 }
 
+/// Parse a save into a fresh Game (seeded for its RNG, which is not persisted).
+/// Returns None if the version tag is missing/unsupported or a field is corrupt.
+pub fn deserialize(data: &str, seed: u64) -> Option<Game> {
+    let mut g = Game::with_seed(seed);
+    let mut saw_version = false;
+    for line in data.lines() {
+        let mut it = line.splitn(2, ' ');
+        let key = it.next().unwrap_or("");
+        let rest = it.next().unwrap_or("").trim();
+        match key {
+            "stillwater" => {
+                if rest.parse::<u32>().ok()? != VERSION {
+                    return None;
+                }
+                saw_version = true;
+            }
+            "year" => g.calendar.year = rest.parse().ok()?,
+            "season" => g.calendar.season = u8_to_season(rest.parse().ok()?),
+            "day" => g.calendar.day = rest.parse().ok()?,
+            "minutes" => g.clock.minutes = rest.parse().ok()?,
+            "weather" => g.weather = u8_to_weather(rest.parse().ok()?),
+            "weathernext" => g.weather_next = u8_to_weather(rest.parse().ok()?),
+            "px" => g.player.pos.x = rest.parse().ok()?,
+            "py" => g.player.pos.y = rest.parse().ok()?,
+            "energy" => g.player.energy = rest.parse().ok()?,
+            "gold" => g.player.gold = rest.parse().ok()?,
+            "rod" => g.player.rod_tier = rest.parse().ok()?,
+            "bait" => g.player.bait_id = rest.parse().ok()?,
+            "area" => g.world.set_current(rest.parse().ok()?),
+            "settings" => {
+                let v: Vec<&str> = rest.split_whitespace().collect();
+                if v.len() >= 3 {
+                    g.settings.hints = v[0] == "1";
+                    g.settings.color = v[1] == "1";
