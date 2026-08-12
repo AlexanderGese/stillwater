@@ -45,3 +45,37 @@ fn u8_to_weather(n: u8) -> Weather {
         3 => Weather::Storm,
         4 => Weather::Fog,
         5 => Weather::Frost,
+        6 => Weather::Snow,
+        _ => Weather::Sunny,
+    }
+}
+
+pub fn serialize(g: &Game) -> String {
+    let mut out = String::new();
+    out.push_str(&format!("stillwater {}\n", VERSION));
+    out.push_str(&format!("year {}\n", g.calendar.year));
+    out.push_str(&format!("season {}\n", season_to_u8(g.calendar.season)));
+    out.push_str(&format!("day {}\n", g.calendar.day));
+    out.push_str(&format!("minutes {}\n", g.clock.minutes));
+    out.push_str(&format!("weather {}\n", weather_to_u8(g.weather)));
+    out.push_str(&format!("weathernext {}\n", weather_to_u8(g.weather_next)));
+    out.push_str(&format!("px {}\n", g.player.pos.x));
+    out.push_str(&format!("py {}\n", g.player.pos.y));
+    out.push_str(&format!("energy {}\n", g.player.energy));
+    out.push_str(&format!("gold {}\n", g.player.gold));
+    out.push_str(&format!("rod {}\n", g.player.rod_tier));
+    out.push_str(&format!("bait {}\n", g.player.bait_id));
+    out.push_str(&format!("area {}\n", g.world.current()));
+    let mut fundedline = String::from("funded");
+    for i in 0..crate::restore::PROJECTS.len() {
+        fundedline.push(' ');
+        fundedline.push(if g.world.is_funded(i) { '1' } else { '0' });
+    }
+    fundedline.push('\n');
+    out.push_str(&fundedline);
+    let b = |x: bool| if x { 1 } else { 0 };
+    out.push_str(&format!(
+        "settings {} {} {}\n",
+        b(g.settings.hints),
+        b(g.settings.color),
+        b(g.settings.guide)
