@@ -709,3 +709,10 @@ mod tests {
                 },
                 _ => break,
             }
+        }
+        // If we landed anything, the journal has recorded at least one species.
+        if g.player.gold > 0 {
+            assert!(g.journal.seen_count() >= 1);
+        }
+    }
+}
