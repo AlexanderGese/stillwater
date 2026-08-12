@@ -675,3 +675,37 @@ mod tests {
         assert_eq!(g.player.gold, 500);
     }
 
+    #[test]
+    fn buying_without_gold_is_refused() {
+        let mut g = Game::new();
+        g.mode = Mode::Shop;
+        g.player.gold = 10;
+        g.apply(Action::Buy(1)); // 500g rod
+        assert_eq!(g.player.rod_tier, 0);
+        assert_eq!(g.player.gold, 10);
+        assert!(g.message.contains("Not enough"));
+    }
+
+    #[test]
+    fn landing_a_fish_records_it_in_the_journal() {
+        let mut g = Game::with_seed(7);
+        g.mode = Mode::Fishing(Session::new(WaterType::Shallow));
+        for _ in 0..300 {
+            match &g.mode {
+                Mode::Fishing(s) => match &s.phase {
+                    fishing::Phase::Waiting { .. } => g.apply(Action::Wait),
+                    fishing::Phase::Bite { .. } => g.apply(Action::Interact),
+                    fishing::Phase::Fighting(f) => {
+                        if f.darting {
+                            g.apply(Action::Move(Dir::South))
+                        } else {
+                            g.apply(Action::Interact)
+                        }
+                    }
+                    _ => {
+                        g.apply(Action::Interact);
+                        break;
+                    }
+                },
+                _ => break,
+            }
