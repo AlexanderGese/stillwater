@@ -79,3 +79,29 @@ pub fn serialize(g: &Game) -> String {
         b(g.settings.hints),
         b(g.settings.color),
         b(g.settings.guide)
+    ));
+    out.push_str(&format!("legend {}\n", b(g.legend_shown)));
+    let mut fishline = String::from("fish");
+    for f in fish::FISH {
+        if g.journal.is_seen(f.id) {
+            fishline.push_str(&format!(" {}:{}", f.id, g.journal.record_size(f.id)));
+        }
+    }
+    fishline.push('\n');
+    out.push_str(&fishline);
+    out
+}
+
+/// Write the save atomically (temp file + rename).
+pub fn save(g: &Game, path: &str) -> std::io::Result<()> {
+    let tmp = format!("{}.tmp", path);
+    let data = serialize(g);
+    {
+        let mut f = fs::File::create(&tmp)?;
+        f.write_all(data.as_bytes())?;
+        f.sync_all()?;
+    }
+    fs::rename(&tmp, path)?;
+    Ok(())
+}
+
