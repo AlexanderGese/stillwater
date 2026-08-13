@@ -84,3 +84,27 @@ fn draw_guide_or_hint(g: &Game, buf: &mut Vec<u8>) {
     }
 }
 
+fn draw_menu(g: &Game, sel: usize, buf: &mut Vec<u8>) {
+    const W: usize = 29;
+    let bar: String = "\u{2550}".repeat(W);
+    let _ = writeln!(buf, "\n\n");
+    let _ = writeln!(buf, "        \u{2554}{}\u{2557}", bar);
+    let _ = writeln!(buf, "        \u{2551}{:^W$}\u{2551}", "S T I L L W A T E R");
+    let _ = writeln!(buf, "        \u{2551}{:^W$}\u{2551}", "F  A  R  M");
+    let _ = writeln!(buf, "        \u{255A}{}\u{255D}", bar);
+    let _ = writeln!(buf, "           a cozy fishing life\n");
+    for (i, opt) in g.menu_options().iter().enumerate() {
+        let cursor = if i == sel { "\u{25B8} " } else { "  " };
+        let _ = writeln!(buf, "            {}{}. {}", cursor, i + 1, opt);
+    }
+    let _ = writeln!(buf, "\n   [w/s] choose   [enter] select   (or press the number)");
+}
+
+fn draw_story(g: &Game, page: usize, buf: &mut Vec<u8>) {
+    let text = g.story_pages.get(page).copied().unwrap_or("");
+    let _ = writeln!(buf, "\n");
+    let _ = writeln!(buf, "{}", text);
+    let total = g.story_pages.len().max(1);
+    let _ = writeln!(buf, "\n                                              ({}/{})", page + 1, total);
+}
+
