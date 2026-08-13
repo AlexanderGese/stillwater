@@ -223,3 +223,18 @@ mod tests {
         assert!(deserialize("stillwater 999\nyear 1\n", 1).is_none());
     }
 
+    #[test]
+    fn save_then_load_from_disk() {
+        let mut g = Game::with_seed(1);
+        g.player.gold = 777;
+        let dir = std::env::temp_dir();
+        let path = dir
+            .join(format!("stillwater-test-{}.save", std::process::id()))
+            .to_string_lossy()
+            .to_string();
+        save(&g, &path).unwrap();
+        let g2 = load(&path, 2).expect("loads");
+        assert_eq!(g2.player.gold, 777);
+        let _ = fs::remove_file(&path);
+    }
+}
