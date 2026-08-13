@@ -200,3 +200,26 @@ mod tests {
         let text = serialize(&g);
         let g2 = deserialize(&text, 99).expect("valid save");
 
+        assert_eq!(g2.calendar.year, 2);
+        assert_eq!(g2.calendar.season, Season::Fall);
+        assert_eq!(g2.calendar.day, 14);
+        assert_eq!(g2.clock.minutes, 15 * 60);
+        assert_eq!(g2.weather, Weather::Rain);
+        assert_eq!(g2.weather_next, Weather::Fog);
+        assert_eq!(g2.player.gold, 4321);
+        assert_eq!(g2.player.rod_tier, 2);
+        assert_eq!(g2.player.bait_id, 4);
+        assert_eq!(g2.player.energy, 55);
+        assert!(g2.journal.is_seen(1));
+        assert_eq!(g2.journal.record_size(1), 15);
+        assert!(g2.journal.is_seen(10));
+        assert_eq!(g2.journal.record_size(10), 60);
+        assert!(!g2.journal.is_seen(2));
+    }
+
+    #[test]
+    fn rejects_garbage() {
+        assert!(deserialize("not a save file", 1).is_none());
+        assert!(deserialize("stillwater 999\nyear 1\n", 1).is_none());
+    }
+
