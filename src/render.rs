@@ -50,3 +50,37 @@ pub fn draw(g: &Game, buf: &mut Vec<u8>) {
             draw_fishing(s, buf);
             draw_guide_or_hint(g, buf);
         }
+        Mode::Shop => draw_shop(g, buf),
+        Mode::Journal => draw_journal(g, buf),
+        Mode::Restore => draw_restore(g, buf),
+        Mode::Help => draw_help(buf),
+        Mode::Menu { .. } | Mode::Settings { .. } | Mode::Story { .. } => {}
+    }
+}
+
+fn draw_settings(g: &Game, sel: usize, buf: &mut Vec<u8>) {
+    use crate::settings::Settings;
+    let _ = writeln!(buf, "\n\n");
+    let _ = writeln!(buf, "        ~~~~~  S E T T I N G S  ~~~~~\n");
+    for (i, label) in Settings::LABELS.iter().enumerate() {
+        let cursor = if i == sel { "\u{25B8} " } else { "  " };
+        let val = if g.settings.get(i) { "ON " } else { "OFF" };
+        let _ = writeln!(buf, "        {}{}. [{}]  {}", cursor, i + 1, val, label);
+    }
+    let _ = writeln!(buf, "\n   [w/s] choose   [enter] toggle   [esc] back");
+}
+
+fn draw_guide_or_hint(g: &Game, buf: &mut Vec<u8>) {
+    if let Some(s) = g.guide_step {
+        let _ = writeln!(
+            buf,
+            "\u{2605} {}   [esc] skip",
+            crate::tutorial::guide_prompt(s)
+        );
+    } else if g.settings.hints {
+        if let Some(h) = crate::tutorial::hint(g) {
+            let _ = writeln!(buf, "\u{00bb} {}", h);
+        }
+    }
+}
+
