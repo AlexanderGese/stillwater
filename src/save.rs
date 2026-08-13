@@ -171,3 +171,32 @@ pub fn deserialize(data: &str, seed: u64) -> Option<Game> {
     }
 }
 
+pub fn load(path: &str, seed: u64) -> Option<Game> {
+    let data = fs::read_to_string(path).ok()?;
+    deserialize(&data, seed)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::fish::Catch;
+
+    #[test]
+    fn round_trips_core_state() {
+        let mut g = Game::with_seed(5);
+        g.calendar.year = 2;
+        g.calendar.season = Season::Fall;
+        g.calendar.day = 14;
+        g.clock.minutes = 15 * 60;
+        g.weather = Weather::Rain;
+        g.weather_next = Weather::Fog;
+        g.player.gold = 4321;
+        g.player.rod_tier = 2;
+        g.player.bait_id = 4;
+        g.player.energy = 55;
+        g.journal.record_catch(&Catch { fish_id: 1, size: 15 });
+        g.journal.record_catch(&Catch { fish_id: 10, size: 60 });
+
+        let text = serialize(&g);
+        let g2 = deserialize(&text, 99).expect("valid save");
+
