@@ -139,3 +139,35 @@ pub fn deserialize(data: &str, seed: u64) -> Option<Game> {
                 if v.len() >= 3 {
                     g.settings.hints = v[0] == "1";
                     g.settings.color = v[1] == "1";
+                    g.settings.guide = v[2] == "1";
+                }
+            }
+            "legend" => g.legend_shown = rest == "1",
+            "funded" => {
+                for (i, tok) in rest.split_whitespace().enumerate() {
+                    if tok == "1" {
+                        g.world.fund(i);
+                    }
+                }
+            }
+            "fish" => {
+                let mut j = Journal::new();
+                for tok in rest.split_whitespace() {
+                    let mut p = tok.split(':');
+                    let id: u16 = p.next()?.parse().ok()?;
+                    let size: u16 = p.next().unwrap_or("0").parse().ok()?;
+                    j.record_catch(&Catch { fish_id: id, size });
+                }
+                g.journal = j;
+            }
+            _ => {}
+        }
+    }
+    if saw_version {
+        g.loaded_from_save = true;
+        Some(g)
+    } else {
+        None
+    }
+}
+
