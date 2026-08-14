@@ -218,3 +218,37 @@ fn wall_glyph(map: &Map, p: Point) -> char {
         7 => '\u{251C}',          // ├
         13 => '\u{2524}',         // ┤
         14 => '\u{252C}',         // ┬
+        11 => '\u{2534}',         // ┴
+        15 => '\u{253C}',         // ┼
+        _ => '\u{2500}',          // ─ (isolated)
+    }
+}
+
+fn draw_fishing(s: &Session, buf: &mut Vec<u8>) {
+    let _ = writeln!(buf, "~~~~~ fishing ~~~~~");
+    match &s.phase {
+        Phase::Waiting { waited } => {
+            let dots = ".".repeat((*waited as usize).min(8) + 1);
+            let _ = writeln!(buf, "your line drifts on the water{}   [any key] wait", dots);
+        }
+        Phase::Bite { .. } => {
+            let _ = writeln!(buf, "!!!  a bite!  press [e] to set the hook!");
+        }
+        Phase::Fighting(f) => {
+            if f.boss {
+                let name = fish::by_id(f.fish_id).map(|d| d.name).unwrap_or("a giant");
+                let surge = if f.surge { "   \u{2014} IT SURGES!" } else { "" };
+                let _ = writeln!(
+                    buf,
+                    "\u{2694} A LEGEND ON THE LINE: {}  \u{2014} phase {} of 3{}",
+                    name, f.phases_left, surge
+                );
+            }
+            let _ = writeln!(
+                buf,
+                "reel  {}  {}%",
+                bar(f.progress, 100, 16),
+                f.progress.clamp(0, 100)
+            );
+            let hint = if f.darting {
+                "<< it's DARTING - ease off!"
