@@ -252,3 +252,32 @@ fn draw_fishing(s: &Session, buf: &mut Vec<u8>) {
             );
             let hint = if f.darting {
                 "<< it's DARTING - ease off!"
+            } else {
+                "steady - reel it in!"
+            };
+            let _ = writeln!(buf, "line  {}  {}", bar(f.slack, 100, 16), hint);
+            let _ = writeln!(buf, "[w] reel   [s] ease");
+        }
+        Phase::Landed(c) => {
+            let name = fish::by_id(c.fish_id).map(|f| f.name).unwrap_or("fish");
+            let _ = writeln!(buf, "you landed a {} ({}cm)!   [e] continue", name, c.size);
+        }
+        Phase::Lost(reason) => {
+            let _ = writeln!(buf, "{}   [e] continue", reason);
+        }
+    }
+}
+
+fn draw_shop(g: &Game, buf: &mut Vec<u8>) {
+    let _ = writeln!(buf, "~~~~~ tackle shop ~~~~~   gold: {}", g.player.gold);
+    let offers = shop::offers(g.player.rod_tier, g.player.bait_id);
+    for (i, off) in offers.iter().enumerate() {
+        let tag = if off.owned { "  (equipped)" } else { "" };
+        let _ = writeln!(buf, "  {}) {:<18} {}g{}", i + 1, off.name, off.price, tag);
+    }
+    let _ = writeln!(buf, "[1-{}] buy   [esc] leave", offers.len().min(9));
+    if !g.message.is_empty() {
+        let _ = writeln!(buf, "{}", g.message);
+    }
+}
+
