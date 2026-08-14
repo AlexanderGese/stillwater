@@ -131,3 +131,22 @@ fn draw_help(buf: &mut Vec<u8>) {
 }
 
 
+fn draw_header(g: &Game, buf: &mut Vec<u8>) {
+    let _ = writeln!(buf, "Stillwater Farm  \u{2014}  {}", g.world.area_name());
+    let time = if g.clock.is_dusk() {
+        format!("{} (dusk)", g.clock.label())
+    } else {
+        g.clock.label()
+    };
+    let _ = writeln!(
+        buf,
+        "{}  {}  {} {}   energy {}   gold {}",
+        g.calendar.label(),
+        time,
+        g.weather.glyph(),
+        g.weather.name(),
+        bar(g.player.energy, MAX_ENERGY, 10),
+        g.player.gold
+    );
+}
+
