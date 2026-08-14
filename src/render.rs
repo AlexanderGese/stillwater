@@ -150,3 +150,37 @@ fn draw_header(g: &Game, buf: &mut Vec<u8>) {
     );
 }
 
+fn draw_map(g: &Game, buf: &mut Vec<u8>) {
+    let map = g.world.map();
+    let color = g.settings.color;
+    let vw = VIEW_W.min(map.w);
+    let vh = VIEW_H.min(map.h);
+    let cam_x = (g.player.pos.x - vw / 2).clamp(0, (map.w - vw).max(0));
+    let cam_y = (g.player.pos.y - vh / 2).clamp(0, (map.h - vh).max(0));
+    for row in 0..vh {
+        let y = cam_y + row;
+        let mut line = String::new();
+        for col in 0..vw {
+            let x = cam_x + col;
+            let p = Point::new(x, y);
+            if p == g.player.pos {
+                if color {
+                    line.push_str(crate::color::PLAYER);
+                    line.push('@');
+                    line.push_str(crate::color::RESET);
+                } else {
+                    line.push('@');
+                }
+            } else {
+                let t = map.get(p);
+                let ch = if t == Tile::Wall {
+                    wall_glyph(map, p)
+                } else {
+                    t.glyph()
+                };
+                if color {
+                    line.push_str(crate::color::tile(t));
+                    line.push(ch);
+                    line.push_str(crate::color::RESET);
+                } else {
+                    line.push(ch);
