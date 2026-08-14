@@ -310,3 +310,35 @@ fn draw_journal(g: &Game, buf: &mut Vec<u8>) {
     let _ = writeln!(buf, "[any key] close");
 }
 
+fn draw_restore(g: &Game, buf: &mut Vec<u8>) {
+    let _ = writeln!(buf, "~~~~~ restoration board ~~~~~   gold: {}", g.player.gold);
+    for (i, p) in restore::PROJECTS.iter().enumerate() {
+        let status = if g.world.is_funded(i) {
+            "DONE".to_string()
+        } else {
+            format!("{}g", p.cost)
+        };
+        let _ = writeln!(buf, "  {}) {:<22} {:<8} - {}", i + 1, p.name, status, p.blurb);
+    }
+    let _ = writeln!(buf, "[1-{}] fund   [esc] leave", restore::PROJECTS.len());
+    if !g.message.is_empty() {
+        let _ = writeln!(buf, "{}", g.message);
+    }
+}
+
+/// A `[####----]` bar, `width` cells, filled proportional to `val/max`.
+fn bar(val: i32, max: i32, width: usize) -> String {
+    let ratio = if max > 0 {
+        (val.clamp(0, max) as f32) / max as f32
+    } else {
+        0.0
+    };
+    let filled = ((ratio * width as f32).round() as usize).min(width);
+    let mut s = String::from("[");
+    for i in 0..width {
+        s.push(if i < filled { '#' } else { '-' });
+    }
+    s.push(']');
+    s
+}
+
