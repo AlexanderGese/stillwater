@@ -184,3 +184,37 @@ fn draw_map(g: &Game, buf: &mut Vec<u8>) {
                     line.push_str(crate::color::RESET);
                 } else {
                     line.push(ch);
+                }
+            }
+        }
+        let _ = writeln!(buf, "{}", line);
+    }
+}
+
+/// Smart box-drawing glyph for a wall tile, from its wall neighbours.
+/// Out-of-bounds counts as wall so the map border joins up cleanly.
+fn wall_glyph(map: &Map, p: Point) -> char {
+    let is_wall = |x: i32, y: i32| map.get(Point::new(x, y)) == Tile::Wall;
+    let mut m = 0u8;
+    if is_wall(p.x, p.y - 1) {
+        m |= 1;
+    }
+    if is_wall(p.x + 1, p.y) {
+        m |= 2;
+    }
+    if is_wall(p.x, p.y + 1) {
+        m |= 4;
+    }
+    if is_wall(p.x - 1, p.y) {
+        m |= 8;
+    }
+    match m {
+        1 | 4 | 5 => '\u{2502}',  // │
+        2 | 8 | 10 => '\u{2500}', // ─
+        6 => '\u{250C}',          // ┌
+        12 => '\u{2510}',         // ┐
+        3 => '\u{2514}',          // └
+        9 => '\u{2518}',          // ┘
+        7 => '\u{251C}',          // ├
+        13 => '\u{2524}',         // ┤
+        14 => '\u{252C}',         // ┬
