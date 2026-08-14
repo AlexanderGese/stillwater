@@ -108,3 +108,26 @@ fn draw_story(g: &Game, page: usize, buf: &mut Vec<u8>) {
     let _ = writeln!(buf, "\n                                              ({}/{})", page + 1, total);
 }
 
+fn draw_help(buf: &mut Vec<u8>) {
+    let _ = writeln!(buf, "~~~~~ how to play ~~~~~");
+    let lines = [
+        "  move ............ W A S D  /  arrow keys",
+        "  cast / act ...... E  (at water: cast; at bed: sleep; at H: shop; at N: board)",
+        "  reel fight ...... W reel,  S ease  (ease when the fish is DARTING)",
+        "  wait ............ Z",
+        "  journal ......... J",
+        "  buy / fund ...... 1-9  (in the shop or on the restoration board)",
+        "  travel .......... walk into an open edge of the map",
+        "  close menu ...... Esc      quit ...... Q",
+        "",
+        "  Catch fish for gold, buy better gear at the shop (H), sleep (B) to pass",
+        "  days & seasons, and fund restoration at the town board (N) to open the",
+        "  marsh, river, and deep lake.",
+    ];
+    for l in lines {
+        let _ = writeln!(buf, "{}", l);
+    }
+    let _ = writeln!(buf, "[any key] close");
+}
+
+
