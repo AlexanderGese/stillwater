@@ -281,3 +281,32 @@ fn draw_shop(g: &Game, buf: &mut Vec<u8>) {
     }
 }
 
+fn draw_journal(g: &Game, buf: &mut Vec<u8>) {
+    let _ = writeln!(
+        buf,
+        "~~~~~ fish journal ~~~~~   {}/{} species",
+        g.journal.seen_count(),
+        g.journal.total_species()
+    );
+    for f in fish::FISH {
+        if g.journal.is_seen(f.id) {
+            let _ = writeln!(
+                buf,
+                "  {} {:<20} record {}cm",
+                f.glyph,
+                f.name,
+                g.journal.record_size(f.id)
+            );
+        } else {
+            let _ = writeln!(buf, "  ? ???");
+        }
+    }
+    let done = if g.journal.is_complete() {
+        "   the journal is COMPLETE!"
+    } else {
+        ""
+    };
+    let _ = writeln!(buf, "caught {} fish in all.{}", g.journal.caught_total(), done);
+    let _ = writeln!(buf, "[any key] close");
+}
+
