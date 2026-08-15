@@ -342,3 +342,34 @@ fn bar(val: i32, max: i32, width: usize) -> String {
     s
 }
 
+pub fn to_string(g: &Game) -> String {
+    let mut buf = Vec::new();
+    draw(g, &mut buf);
+    String::from_utf8(buf).unwrap()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn renders_hud_and_player() {
+        let g = crate::game::Game::new();
+        let s = to_string(&g);
+        assert!(s.contains(g.world.area_name()));
+        assert!(s.contains("Spring 1"));
+        assert!(s.contains("energy"));
+        assert!(s.contains('@'));
+    }
+
+    #[test]
+    fn renders_menus() {
+        use crate::game::Mode;
+        let mut g = crate::game::Game::new();
+        g.mode = Mode::Shop;
+        assert!(to_string(&g).contains("tackle shop"));
+        g.mode = Mode::Journal;
+        assert!(to_string(&g).contains("fish journal"));
+        g.mode = Mode::Restore;
+        assert!(to_string(&g).contains("restoration board"));
+    }
+}
