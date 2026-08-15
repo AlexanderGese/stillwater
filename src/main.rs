@@ -60,3 +60,30 @@ fn main() -> io::Result<()> {
 
 const SAVE_PATH: &str = ".stillwater.save";
 
+fn run(out: &mut io::Stdout) -> io::Result<()> {
+    let seed = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| d.as_nanos() as u64)
+        .unwrap_or(1);
+    let mut g = save::load(SAVE_PATH, seed).unwrap_or_else(|| game::Game::with_seed(seed));
+    g.to_menu(); // always open on the main menu ("Continue" appears if a save loaded)
+    while g.running {
+        // draw
+        let mut buf = Vec::new();
+        render::draw(&g, &mut buf);
+        execute!(out, terminal::Clear(terminal::ClearType::All), cursor::MoveTo(0, 0))?;
+        // raw mode needs explicit CR+LF: replace \n with \r\n
+        let text = String::from_utf8_lossy(&buf).replace('\n', "\r\n");
+        out.write_all(text.as_bytes())?;
+        out.flush()?;
+
+        // input (blocking)
+        if let Event::Key(k) = event::read()? {
+            let action = input::key_to_action(k.code).unwrap_or(game::Action::Any);
+            g.apply(action);
+            let _ = save::save(&g, SAVE_PATH);
+        }
+    }
+    let _ = save::save(&g, SAVE_PATH);
+    Ok(())
+}
