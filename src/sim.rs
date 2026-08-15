@@ -23,3 +23,16 @@ pub fn walk(path: &str) -> Game {
     run_script(&actions)
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::geom::Point;
+    #[test]
+    fn scripted_walk_moves_player() {
+        // From start, move East twice then South once (all onto walkable yard tiles).
+        let g0 = crate::game::Game::new();
+        let start = g0.player.pos;
+        let g = walk("dds");
+        assert_eq!(g.player.pos, Point::new(start.x + 2, start.y + 1));
+    }
+}
