@@ -32,3 +32,31 @@ mod settings;
 mod shop;
 mod story;
 mod sim;
+mod tackle;
+mod tile;
+mod tutorial;
+mod weather;
+mod world;
+
+use crossterm::{
+    cursor,
+    event::{self, Event},
+    execute,
+    terminal::{self, EnterAlternateScreen, LeaveAlternateScreen},
+};
+use std::io::{self, Write};
+
+fn main() -> io::Result<()> {
+    let mut out = io::stdout();
+    terminal::enable_raw_mode()?;
+    execute!(out, EnterAlternateScreen, cursor::Hide)?;
+
+    let result = run(&mut out);
+
+    execute!(out, cursor::Show, LeaveAlternateScreen)?;
+    terminal::disable_raw_mode()?;
+    result
+}
+
+const SAVE_PATH: &str = ".stillwater.save";
+
