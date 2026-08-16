@@ -9,6 +9,8 @@ Built with `crossterm` + the standard library only. No other dependencies.
 ## Play
 
 ```
+git clone https://github.com/AlexanderGese/stillwater
+cd stillwater
 cargo run
 ```
 
